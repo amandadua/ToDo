@@ -1,0 +1,17 @@
+{
+    "name": "amanda/todo",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Amanda\\Todo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "amandadua",
+            "email": "amandaduartesantos13@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
