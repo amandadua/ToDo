@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
+    <title>ToDo | Perfil</title>
     <link rel="stylesheet" href="../Templates/Assets/CSS/global.css">
     <link rel="stylesheet" href="../Templates/Assets/CSS/userpage.css">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel="shortcut icon" href="../Images/icone.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container">
