@@ -116,29 +116,34 @@
 .campo-perfil {
     padding-bottom: 20px;
     border-bottom: 1px solid #333;
-}
-
-.campo-perfil:last-child {
-    border-bottom: none;
+    justify-content: space-between;
 }
 
 .campo-perfil .linha {
     display: flex;
     align-items: center;
     gap: 20px;
+    justify-content: space-between;
 }
 
 .campo-perfil label {
-    font-size: 1.1em;
-    color: #e0e0e0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
     min-width: 150px;
     flex-shrink: 0;
 }
 
-.campo-perfil .valor {
-    flex: 1;
-    font-size: 1.1em;
-    color: #ccc;
+#nome-usuario {
+    color: #ffffff;
+    font-size: 20px;
+    margin-left: 31px;
+}
+
+#email-usuario{
+    color: #ffffff68;
+    font-size: 17px;
+    margin-right: 150px;
 }
 
 .campo-perfil .foto-perfil {
@@ -159,7 +164,7 @@
 .link-atualizar {
     color: #ffffff;
     font-weight: bold;
-    font-size: 0.95em;
+    font-size: 17px;
     transition: color 0.2s ease;
     flex-shrink: 0;
 }

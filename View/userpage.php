@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <header class="header">
-            <button class="botao-voltar">
+            <a href="Dashboard.php"><button class="botao-voltar"></a>
                 <i class="fi fi-rr-arrow-small-left"></i>
                 <span>Voltar</span>
             </button>
@@ -53,7 +53,7 @@
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Nome de usuário</label>
-                        <span class="valor">Nicollas</span>
+                        <span class="valor" id="nome-usuario">Nicollas</span>
                         <button class="link-atualizar">Atualizar nome de usuário</button>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Endereço de email</label>
-                        <span class="valor">nicollasrio227@gmail.com</span>
+                        <span class="valor" id="email-usuario">nicollasrio227@gmail.com</span>
                         <button class="botao-opcoes">
                             <i class="fi fi-rr-menu-dots"></i>
                         </button>
