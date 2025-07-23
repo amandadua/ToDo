@@ -1,0 +1,25 @@
+html{
+    height: 100%;
+}
+
+
+body{
+  
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2B2B2B;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 30px;
+    height: 677px;
+    width: 492px;
+    background-color: #0A0A0A;
+    color: white;
+}
