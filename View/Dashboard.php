@@ -22,10 +22,11 @@
         <aside class="sidebar">
             <!-- Logo -->
             <div class="logo">
+                
                 <div class="logo-icon">
-                    <i class="fas fa-check-double"></i>
-                    <img src="/Images/logo_gerenciador_tarefas_menos_3d.webp" alt="">
-                </div>
+                    <i class= img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt=""></i>
+<!-- <img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt="">                 -->
+            </div>
                 <span class="logo-text">ToDo</span>
             </div>
 
@@ -33,11 +34,14 @@
             <nav class="nav-menu">
                 <div class="nav-item active">
                     <i class="fas fa-chart-pie"></i>
+                    
                     <span>Dashboard</span>
                 </div>
                 <div class="nav-item">
                     <i class="fas fa-list-check"></i>
+                    <a href="Gerenciador.php" class="nav-item">
                     <span>Lista de tarefas</span>
+                </a>
                 </div>
             </nav>
 
