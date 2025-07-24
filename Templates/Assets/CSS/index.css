@@ -21,11 +21,22 @@
     align-items: center;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+}
+
 .logo-texto {
     justify-content: center;
     font-size: 24px;
     font-weight: bold;
-    background: linear-gradient(135deg, #00ff88, #00ccff);
+    background: linear-gradient(135deg, #35aac0, #279487);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -67,12 +78,20 @@
     background-color: #333;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
 .botao-cadastro {
     background: linear-gradient(135deg, #8b5cf6, #a855f7);
     color: white;
     padding: 15px 30px;
     font-size: 18px;
     margin-top: 15px;
+    display: flex;  
+    justify-content: center;
+    width: 200px;
 }
 
 .botao-cadastro:hover {
@@ -94,7 +113,8 @@
 }
 
 .titulo-linha {
-    display: block;
+    display: flex;
+    justify-content: center;
 }
 
 .estilo {
@@ -112,4 +132,6 @@
 
 #rotating-text {
     transition: opacity 0.3s;
+    display: flex;
+    justify-content: center;
 } 

@@ -7,7 +7,7 @@
     <title>ToDo</title>
     <link rel="stylesheet" href="Templates/Assets/CSS/global.css">
     <link rel="stylesheet" href="Templates/Assets/CSS/index.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="Images/icone.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -15,12 +15,12 @@
         <div class="container">
             <div class="nav">
                 <div class="logo">
-                    <img src="" alt="">
+                    <img src="Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png" alt="logo">
                     <span class="logo-texto">ToDo</span>
                 </div>
                 <div class="nav-botoes">
-                    <a href="" class="btn btn-secondary">Login</a>
-                    <a href="" class="btn btn-primary">Cadastro</a>
+                    <a href="View/login.php" class="btn btn-secondary">Login</a>
+                    <a href="View/cadastro.php" class="btn btn-primary">Cadastro</a>
                 </div>
             </div>
         </div>
@@ -35,7 +35,9 @@
                 </h1>
                 <p class="titulo-legenda">Uma ferramenta gratuita de gerenciamento de projetos criada para pequenos
                     projetos.</p>
-                <a href="" class="btn botao-cadastro">Começar</a>
+                    <div class="button-container">
+                <a href="View/cadastro.php" class="btn botao-cadastro">Começar</a>
+                </div>
             </div>
         </div>
     </section>
