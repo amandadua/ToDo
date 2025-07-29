@@ -26,7 +26,7 @@
                     <i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="tasks.html" class="nav-item active">
+                <a href="" class="nav-item active">
                     <i class="fas fa-list-check"></i>
                     <span>Lista de tarefas</span>
                 </a>
@@ -103,83 +103,37 @@
             </section>
         </main>
     </div>
-    <script src="script.js">
-
+    <script>
+        // Funcionalidades específicas para a página de lista de tarefas
 document.addEventListener("DOMContentLoaded", function() {
     
-
+    // Navegação do menu (comum a ambas as páginas)
     const navItems = document.querySelectorAll(".nav-item");
     navItems.forEach(item => {
         item.addEventListener("click", function() {
-
             navItems.forEach(nav => nav.classList.remove("active"));
-
             this.classList.add("active");
         });
     });
 
-
+    // Interação com projetos (comum a ambas as páginas)
     const projectItems = document.querySelectorAll(".project-item");
     projectItems.forEach(item => {
         item.addEventListener("click", function() {
             const projectName = this.querySelector(".project-name").textContent;
             console.log(`Projeto selecionado: ${projectName}`);
-
         });
     });
 
-
+    // Menu do usuário (comum a ambas as páginas)
     const userMenu = document.querySelector(".user-menu");
     if (userMenu) {
         userMenu.addEventListener("click", function() {
             console.log("Menu do usuário clicado");
-
         });
     }
 
-
-    const cards = document.querySelectorAll(".card");
-    cards.forEach((card, index) => {
-        card.style.opacity = "0";
-        card.style.transform = "translateY(20px)";
-        
-        setTimeout(() => {
-            card.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-            card.style.opacity = "1";
-            card.style.transform = "translateY(0)";
-        }, index * 100);
-    });
-
-
-    function updateStats() {
-        const statNumbers = document.querySelectorAll(".stat-number");
-        statNumbers.forEach(stat => {
-            const currentValue = parseInt(stat.textContent);
-
-            animateNumber(stat, 0, currentValue, 1000);
-        });
-    }
-
-
-    function animateNumber(element, start, end, duration) {
-        const range = end - start;
-        const increment = range / (duration / 16);
-        let current = start;
-        
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= end) {
-                current = end;
-                clearInterval(timer);
-            }
-            element.textContent = Math.floor(current);
-        }, 16);
-    }
-
-
-    setTimeout(updateStats, 500);
-
-
+    // Responsividade - ajustar sidebar em telas pequenas (comum a ambas as páginas)
     function handleResize() {
         const sidebar = document.querySelector(".sidebar");
         const mainContent = document.querySelector(".main-content");
@@ -193,14 +147,178 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-
+    // Listener para redimensionamento (comum a ambas as páginas)
     window.addEventListener("resize", handleResize);
     
-
+    // Verificar tamanho inicial (comum a ambas as páginas)
     handleResize();
+
+    // Funcionalidades específicas da lista de tarefas
+    // Adicionar nova tarefa
+    const addTaskButton = document.querySelector(".add-task-button");
+    if (addTaskButton) {
+        addTaskButton.addEventListener("click", function() {
+            addNewTask();
+        });
+    }
+
+    // Função para adicionar nova tarefa
+    function addNewTask() {
+        const taskName = prompt("Digite o nome da nova tarefa:");
+        if (taskName && taskName.trim()) {
+            const taskListSection = document.querySelector(".task-list-section");
+            const newTaskRow = createTaskElement(taskName.trim());
+            taskListSection.appendChild(newTaskRow);
+            
+            // Animar entrada da nova tarefa
+            setTimeout(() => {
+                newTaskRow.style.opacity = "1";
+                newTaskRow.style.transform = "translateX(0)";
+            }, 10);
+        }
+    }
+
+    // Função para criar elemento de tarefa
+    function createTaskElement(taskName) {
+        const taskRow = document.createElement("div");
+        taskRow.className = "task-item-row";
+        taskRow.style.opacity = "0";
+        taskRow.style.transform = "translateX(-20px)";
+        taskRow.style.transition = "all 0.3s ease";
+        
+        taskRow.innerHTML = `
+            <div class="task-details">
+                <i class="far fa-circle task-checkbox"></i>
+                <span class="task-name">${taskName}</span>
+            </div>
+            <button class="remove-task-button">
+                <i class="fas fa-minus"></i>
+            </button>
+        `;
+
+        // Adicionar event listeners
+        const checkbox = taskRow.querySelector(".task-checkbox");
+        const removeButton = taskRow.querySelector(".remove-task-button");
+
+        checkbox.addEventListener("click", function() {
+            toggleTaskCompletion(taskRow);
+        });
+
+        removeButton.addEventListener("click", function() {
+            removeTask(taskRow);
+        });
+
+        return taskRow;
+    }
+
+    // Função para alternar conclusão da tarefa
+    function toggleTaskCompletion(taskRow) {
+        const checkbox = taskRow.querySelector(".task-checkbox");
+        const isCompleted = taskRow.classList.contains("completed");
+        
+        if (isCompleted) {
+            taskRow.classList.remove("completed");
+            checkbox.classList.remove("fas", "fa-check-circle");
+            checkbox.classList.add("far", "fa-circle");
+        } else {
+            taskRow.classList.add("completed");
+            checkbox.classList.remove("far", "fa-circle");
+            checkbox.classList.add("fas", "fa-check-circle");
+        }
+    }
+
+    // Função para remover tarefa
+    function removeTask(taskRow) {
+        if (confirm("Tem certeza que deseja remover esta tarefa?")) {
+            taskRow.classList.add("removing");
+            setTimeout(() => {
+                taskRow.remove();
+            }, 300);
+        }
+    }
+
+    // Adicionar event listeners para tarefas existentes
+    document.querySelectorAll(".task-item-row").forEach(taskRow => {
+        const checkbox = taskRow.querySelector(".task-checkbox");
+        const removeButton = taskRow.querySelector(".remove-task-button");
+
+        if (checkbox) {
+            checkbox.addEventListener("click", function() {
+                toggleTaskCompletion(taskRow);
+            });
+        }
+
+        if (removeButton) {
+            removeButton.addEventListener("click", function() {
+                removeTask(taskRow);
+            });
+        }
+    });
+
+    // Drag and drop functionality
+    let draggedElement = null;
+
+    document.querySelectorAll(".task-item-row").forEach(taskRow => {
+        taskRow.draggable = true;
+        
+        taskRow.addEventListener("dragstart", function(e) {
+            draggedElement = this;
+            this.classList.add("dragging");
+            e.dataTransfer.effectAllowed = "move";
+        });
+
+        taskRow.addEventListener("dragend", function() {
+            this.classList.remove("dragging");
+            draggedElement = null;
+        });
+
+        taskRow.addEventListener("dragover", function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            this.classList.add("drag-over");
+        });
+
+        taskRow.addEventListener("dragleave", function() {
+            this.classList.remove("drag-over");
+        });
+
+        taskRow.addEventListener("drop", function(e) {
+            e.preventDefault();
+            this.classList.remove("drag-over");
+            
+            if (draggedElement && draggedElement !== this) {
+                const taskListSection = document.querySelector(".task-list-section");
+                const allTasks = Array.from(taskListSection.children);
+                const draggedIndex = allTasks.indexOf(draggedElement);
+                const targetIndex = allTasks.indexOf(this);
+                
+                if (draggedIndex < targetIndex) {
+                    this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    this.parentNode.insertBefore(draggedElement, this);
+                }
+            }
+        });
+    });
+
+    // Atalhos de teclado
+    document.addEventListener("keydown", function(e) {
+        // Ctrl/Cmd + N para nova tarefa
+        if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+            e.preventDefault();
+            addNewTask();
+        }
+        
+        // Escape para cancelar ações
+        if (e.key === "Escape") {
+            document.querySelectorAll(".drag-over").forEach(el => {
+                el.classList.remove("drag-over");
+            });
+        }
+    });
 });
 
-
+// Função para toggle da sidebar em mobile (comum a ambas as páginas)
 function toggleSidebar() {
     const sidebar = document.querySelector(".sidebar");
     const isHidden = sidebar.style.transform === "translateX(-100%)";
@@ -211,8 +329,6 @@ function toggleSidebar() {
         sidebar.style.transform = "translateX(-100%)";
     }
 }
-
-
     </script>
     
 </body>

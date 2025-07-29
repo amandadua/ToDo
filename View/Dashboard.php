@@ -173,7 +173,115 @@
             </section>
         </main>
     </div>
-    <script src="script.js"></script>
+    <script>
+        // Dashboard ToDo - Interatividade
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Navegação do menu
+    const navItems = document.querySelectorAll(".nav-item");
+    navItems.forEach(item => {
+        item.addEventListener("click", function() {
+            // Remove active de todos os itens
+            navItems.forEach(nav => nav.classList.remove("active"));
+            // Adiciona active ao item clicado
+            this.classList.add("active");
+        });
+    });
+
+    // Interação com projetos
+    const projectItems = document.querySelectorAll(".project-item");
+    projectItems.forEach(item => {
+        item.addEventListener("click", function() {
+            const projectName = this.querySelector(".project-name").textContent;
+            console.log(`Projeto selecionado: ${projectName}`);
+            // Aqui você pode adicionar lógica para trocar de projeto
+        });
+    });
+
+    // Menu do usuário
+    const userMenu = document.querySelector(".user-menu");
+    if (userMenu) {
+        userMenu.addEventListener("click", function() {
+            console.log("Menu do usuário clicado");
+            // Aqui você pode adicionar um dropdown menu
+        });
+    }
+
+    // Animação dos cards ao carregar
+    const cards = document.querySelectorAll(".card");
+    cards.forEach((card, index) => {
+        card.style.opacity = "0";
+        card.style.transform = "translateY(20px)";
+        
+        setTimeout(() => {
+            card.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+            card.style.opacity = "1";
+            card.style.transform = "translateY(0)";
+        }, index * 100);
+    });
+
+    // Atualização de estatísticas (simulação)
+    function updateStats() {
+        const statNumbers = document.querySelectorAll(".stat-number");
+        statNumbers.forEach(stat => {
+            const currentValue = parseInt(stat.textContent);
+            // Animação de contagem
+            animateNumber(stat, 0, currentValue, 1000);
+        });
+    }
+
+    // Função para animar números
+    function animateNumber(element, start, end, duration) {
+        const range = end - start;
+        const increment = range / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= end) {
+                current = end;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current);
+        }, 16);
+    }
+
+    // Inicializar animações
+    setTimeout(updateStats, 500);
+
+    // Responsividade - ajustar sidebar em telas pequenas
+    function handleResize() {
+        const sidebar = document.querySelector(".sidebar");
+        const mainContent = document.querySelector(".main-content");
+        
+        if (window.innerWidth <= 768) {
+            sidebar.style.transform = "translateX(-100%)";
+            mainContent.style.marginLeft = "0";
+        } else {
+            sidebar.style.transform = "translateX(0)";
+            mainContent.style.marginLeft = "280px";
+        }
+    }
+
+    // Listener para redimensionamento
+    window.addEventListener("resize", handleResize);
+    
+    // Verificar tamanho inicial
+    handleResize();
+});
+
+// Função para toggle da sidebar em mobile
+function toggleSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    const isHidden = sidebar.style.transform === "translateX(-100%)";
+    
+    if (isHidden) {
+        sidebar.style.transform = "translateX(0)";
+    } else {
+        sidebar.style.transform = "translateX(-100%)";
+    }
+}
+        </script>
 </body>
 </html>
 
