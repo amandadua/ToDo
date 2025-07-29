@@ -10,17 +10,17 @@
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Logo -->
+
+    <aside class="sidebar">
+            
             <div class="logo">
                 <div class="logo-icon">
-                    <i class="fas fa-check-double"></i>
+                <img src="../Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt="">                
                 </div>
                 <span class="logo-text">ToDo</span>
             </div>
 
-            <!-- Navigation Menu -->
+
             <nav class="nav-menu">
                 <a href="Dashboard.php" class="nav-item">
                     <i class="fas fa-chart-pie"></i>
@@ -32,7 +32,7 @@
                 </a>
             </nav>
 
-            <!-- Projects Section -->
+
             <div class="projects-section">
                 <div class="section-header">
                     <i class="fas fa-folder-plus"></i>
@@ -50,16 +50,14 @@
                 </div>
             </div>
 
-            <!-- User Profile -->
+
             <div class="user-profile">
                 <div class="user-avatar">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="user-info">
                     <div class="user-name">Nicollas</div>
-                    <div class="user-email">nicollasrio2270,
-                        
-                    @gmail.com</div>
+                    <div class="user-email">nicollasrio2270@gmail.com</div>
                 </div>
                 <div class="user-menu">
                     <i class="fas fa-ellipsis-vertical"></i>
@@ -67,10 +65,10 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+
         <main class="main-content">
-            <!-- Header -->
-            <header class="header">
+
+        <header class="header">
                 <div class="breadcrumb">
                     <span>Projeto 1</span>
                     <i class="fas fa-chevron-right"></i>
@@ -81,7 +79,7 @@
                 </button>
             </header>
 
-            <!-- Task List Section -->
+
             <section class="task-list-section">
                 <div class="task-item-row">
                     <div class="task-details">
@@ -101,45 +99,45 @@
                         <i class="fas fa-minus"></i>
                     </button>
                 </div>
-                <!-- Mais tarefas podem ser adicionadas aqui -->
+
             </section>
         </main>
     </div>
     <script src="script.js">
-        // Dashboard ToDo - Interatividade
+
 document.addEventListener("DOMContentLoaded", function() {
     
-    // Navegação do menu
+
     const navItems = document.querySelectorAll(".nav-item");
     navItems.forEach(item => {
         item.addEventListener("click", function() {
-            // Remove active de todos os itens
+
             navItems.forEach(nav => nav.classList.remove("active"));
-            // Adiciona active ao item clicado
+
             this.classList.add("active");
         });
     });
 
-    // Interação com projetos
+
     const projectItems = document.querySelectorAll(".project-item");
     projectItems.forEach(item => {
         item.addEventListener("click", function() {
             const projectName = this.querySelector(".project-name").textContent;
             console.log(`Projeto selecionado: ${projectName}`);
-            // Aqui você pode adicionar lógica para trocar de projeto
+
         });
     });
 
-    // Menu do usuário
+
     const userMenu = document.querySelector(".user-menu");
     if (userMenu) {
         userMenu.addEventListener("click", function() {
             console.log("Menu do usuário clicado");
-            // Aqui você pode adicionar um dropdown menu
+
         });
     }
 
-    // Animação dos cards ao carregar
+
     const cards = document.querySelectorAll(".card");
     cards.forEach((card, index) => {
         card.style.opacity = "0";
@@ -152,17 +150,17 @@ document.addEventListener("DOMContentLoaded", function() {
         }, index * 100);
     });
 
-    // Atualização de estatísticas (simulação)
+
     function updateStats() {
         const statNumbers = document.querySelectorAll(".stat-number");
         statNumbers.forEach(stat => {
             const currentValue = parseInt(stat.textContent);
-            // Animação de contagem
+
             animateNumber(stat, 0, currentValue, 1000);
         });
     }
 
-    // Função para animar números
+
     function animateNumber(element, start, end, duration) {
         const range = end - start;
         const increment = range / (duration / 16);
@@ -178,10 +176,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 16);
     }
 
-    // Inicializar animações
+
     setTimeout(updateStats, 500);
 
-    // Responsividade - ajustar sidebar em telas pequenas
+
     function handleResize() {
         const sidebar = document.querySelector(".sidebar");
         const mainContent = document.querySelector(".main-content");
@@ -195,14 +193,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Listener para redimensionamento
+
     window.addEventListener("resize", handleResize);
     
-    // Verificar tamanho inicial
+
     handleResize();
 });
 
-// Função para toggle da sidebar em mobile
+
 function toggleSidebar() {
     const sidebar = document.querySelector(".sidebar");
     const isHidden = sidebar.style.transform === "translateX(-100%)";

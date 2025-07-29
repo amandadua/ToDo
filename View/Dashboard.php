@@ -24,8 +24,8 @@
             <div class="logo">
                 
                 <div class="logo-icon">
-                    <i class= img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt=""></i>
-<!-- <img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt="">                 -->
+                    <!-- <i class= img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt=""></i> -->
+<img src="../Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt="">                
             </div>
                 <span class="logo-text">ToDo</span>
             </div>

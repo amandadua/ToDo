@@ -44,7 +44,7 @@ body {
 .logo-icon {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, #4fd1c7, #3bb5ab);
+    /* background: linear-gradient(135deg, #4fd1c7, #3bb5ab); */
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -53,8 +53,8 @@ body {
     font-size: 16px;
 }
 .logo-icon img {
-    width: 32px;
-    height: 32px;
+    width: 62px;
+    height: 62px;
     border-radius: 8px;
 }
 
@@ -67,6 +67,8 @@ body {
 /* Navigation Menu */
 .nav-menu {
     margin-bottom: 40px;
+    height: 104px;
+    width: 240px;
 }
 
 .nav-item {
@@ -167,8 +169,7 @@ body {
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
+    padding: 14px;
     background-color: #4fd1c7;
     border-radius: 50%;
     display: flex;

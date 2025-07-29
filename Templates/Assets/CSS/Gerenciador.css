@@ -1,4 +1,4 @@
-/* Reset e configurações globais */
+
 * {
     margin: 0;
     padding: 0;
@@ -12,13 +12,13 @@ body {
     overflow-x: hidden;
 }
 
-/* Container principal */
+
 .dashboard-container {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar */
+
 .sidebar {
     width: 280px;
     background-color: #2d2d2d;
@@ -32,7 +32,7 @@ body {
     z-index: 100;
 }
 
-/* Logo */
+
 .logo {
     display: flex;
     align-items: center;
@@ -44,7 +44,7 @@ body {
 .logo-icon {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, #4fd1c7, #3bb5ab);
+    /* background: linear-gradient(135deg, #4fd1c7, #3bb5ab); */
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -58,10 +58,17 @@ body {
     font-weight: 700;
     color: #ffffff;
 }
+.logo-icon img{
+    width: 62px;
+    height: 62px;
+    border-radius: 8px;
+}
 
-/* Navigation Menu */
+
 .nav-menu {
     margin-bottom: 40px;
+    height: 104px;
+    width: 240px;
 }
 
 .nav-item {
@@ -91,9 +98,10 @@ body {
     font-size: 16px;
 }
 
-/* Projects Section */
+
 .projects-section {
     margin-bottom: auto;
+    justify-content: bottom;
 }
 
 .section-header {
@@ -149,7 +157,7 @@ body {
     background-color: #8b5cf6;
 }
 
-/* User Profile */
+
 .user-profile {
     display: flex;
     align-items: center;
@@ -158,11 +166,11 @@ body {
     background-color: #3a3a3a;
     border-radius: 12px;
     margin-top: 20px;
+    height: 72px;
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
+    padding: 14px;
     background-color: #4fd1c7;
     border-radius: 50%;
     display: flex;
@@ -200,7 +208,7 @@ body {
     background-color: #4a4a4a;
 }
 
-/* Main Content */
+
 .main-content {
     flex: 1;
     margin-left: 280px;
@@ -208,7 +216,7 @@ body {
     min-height: 100vh;
 }
 
-/* Header */
+
 .header {
     background-color: #2d2d2d;
     padding: 16px 32px;
@@ -227,7 +235,7 @@ body {
     font-size: 12px;
 }
 
-/* Welcome Section */
+
 .welcome-section {
     padding: 32px;
 }
@@ -239,7 +247,7 @@ body {
     margin-bottom: 32px;
 }
 
-/* Dashboard Content */
+
 .dashboard-content {
     padding: 0 32px 32px;
 }
@@ -258,7 +266,6 @@ body {
     grid-template-columns: repeat(4, 1fr);
 }
 
-/* Cards */
 .card {
     background: linear-gradient(135deg, #4fd1c7, #3bb5ab);
     border-radius: 16px;
@@ -298,12 +305,10 @@ body {
     padding: 0 20px 20px;
 }
 
-/* Large Cards (Top Row) */
 .large-card .card-content {
     min-height: 120px;
 }
 
-/* Task Items */
 .task-item {
     display: flex;
     align-items: center;
@@ -340,7 +345,6 @@ body {
     font-size: 12px;
 }
 
-/* Notification Content */
 .notification-content {
     display: flex;
     align-items: center;
@@ -354,7 +358,6 @@ body {
     color: #ffffff;
 }
 
-/* Stat Cards */
 .stat-card .card-content {
     display: flex;
     align-items: center;
@@ -368,7 +371,6 @@ body {
     color: #ffffff;
 }
 
-/* Hover Effects */
 .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -378,7 +380,6 @@ body {
     box-shadow: 0 8px 25px rgba(79, 209, 199, 0.15);
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
     .bottom-row {
         grid-template-columns: repeat(2, 1fr);
@@ -431,9 +432,7 @@ body {
 
 
 
-/* Estilos específicos para a página de lista de tarefas */
 
-/* Header com botão de adicionar tarefa */
 .header {
     display: flex;
     justify-content: space-between;
@@ -461,12 +460,10 @@ body {
     box-shadow: 0 4px 12px rgba(79, 209, 199, 0.3);
 }
 
-/* Seção da lista de tarefas */
 .task-list-section {
     padding: 32px;
 }
 
-/* Item de tarefa */
 .task-item-row {
     display: flex;
     align-items: center;
@@ -486,7 +483,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Detalhes da tarefa */
 .task-details {
     display: flex;
     align-items: center;
@@ -521,7 +517,6 @@ body {
     text-decoration: line-through;
 }
 
-/* Botão de remover tarefa */
 .remove-task-button {
     background-color: transparent;
     color: #cccccc;
@@ -543,7 +538,6 @@ body {
     transform: scale(1.1);
 }
 
-/* Estados de animação para tarefas */
 .task-item-row {
     animation: slideIn 0.3s ease-out;
 }
@@ -559,7 +553,6 @@ body {
     }
 }
 
-/* Animação de remoção */
 .task-item-row.removing {
     animation: slideOut 0.3s ease-in forwards;
 }
@@ -574,7 +567,6 @@ body {
     }
 }
 
-/* Estado vazio da lista */
 .task-list-empty {
     text-align: center;
     padding: 60px 20px;
@@ -598,7 +590,6 @@ body {
     opacity: 0.8;
 }
 
-/* Responsividade para lista de tarefas */
 @media (max-width: 768px) {
     .task-list-section {
         padding: 20px;
@@ -633,7 +624,6 @@ body {
     }
 }
 
-/* Melhorias nos links de navegação */
 .nav-item {
     text-decoration: none;
     color: inherit;
@@ -643,7 +633,6 @@ body {
     color: inherit;
 }
 
-/* Contador de tarefas */
 .task-counter {
     background-color: #4fd1c7;
     color: white;
@@ -654,7 +643,6 @@ body {
     font-weight: 500;
 }
 
-/* Filtros de tarefa */
 .task-filters {
     display: flex;
     gap: 12px;
