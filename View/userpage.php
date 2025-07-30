@@ -13,9 +13,9 @@
 <body>
     <div class="container">
         <header class="header">
-            <a href="Dashboard.php"><button class="botao-voltar"></a>
+            <button class="botao-voltar">
                 <i class="fi fi-rr-arrow-small-left"></i>
-                <span>Voltar</span>
+                <a href="Dashboard.php"><span>Voltar</span></a>
             </button>
         </header>
 
