@@ -172,16 +172,14 @@ body {
 .user-profile {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
     background-color: #3a3a3a;
     border-radius: 12px;
     margin-top: 20px;
+    height: 72px;
 }
 
 .user-avatar {
     padding: 14px;
-    background-color: #4fd1c7;
     border-radius: 50%;
     display: flex;
     align-items: center;

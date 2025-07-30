@@ -87,16 +87,20 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo | Perfil</title>
     <link rel="stylesheet" href="../Templates/Assets/CSS/global.css">
     <link rel="stylesheet" href="../Templates/Assets/CSS/userpage.css">
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/3.0.0/uicons-solid-straight/css/uicons-solid-straight.css'>
     <link rel="shortcut icon" href="../Images/icone.ico" type="image/x-icon">
 </head>
+
 <body>
     <div class="container">
         <header class="header">
@@ -112,7 +116,7 @@ $conn->close();
                     <h2>Conta</h2>
                     <p>Altere as informações da sua conta.</p>
                 </div>
-                
+
                 <nav class="navegacao-barra-lateral">
                     <div class="item-navegacao-ativo">
                         <i class="fi fi-rr-user"></i>
@@ -127,7 +131,7 @@ $conn->close();
 
             <section class="secao-perfil">
                 <h1>Detalhes do perfil</h1>
-                
+
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Perfil</label>
@@ -135,10 +139,10 @@ $conn->close();
                             <form id="form-foto-perfil" action="" method="POST" enctype="multipart/form-data">
                                 <img src="<?php echo htmlspecialchars($foto); ?>" alt="Foto de perfil">
                                 <label>Foto de Perfil:</label>
-                                <input id="input-foto-perfil" type="file" name="foto" accept="image/*" style="display:none;">
+                                <input id="input-foto-perfil" type="file" name="foto" accept="image/*"
+                                    style="display:none;">
                                 <input type="submit" value="Atualizar Perfil" style="display:none;">
                             </form>
-                            <?php if (isset($mensagem)) echo "<p>$mensagem</p>"; ?>
                         </div>
                         <button class="link-atualizar-foto" type="button">Atualizar foto de perfil</button>
                     </div>
@@ -148,7 +152,8 @@ $conn->close();
                     <div class="linha">
                         <label>Nome de usuário</label>
                         <span id="nome-usuario-valor"><?php echo htmlspecialchars($nome); ?></span>
-                        <form id="form-nome" action="" method="POST" style="display:none; align-items:center; gap:10px;">
+                        <form id="form-nome" action="" method="POST"
+                            style="display:none; align-items:center; gap:10px;">
                             <input type="text" name="novo_nome" value="<?php echo htmlspecialchars($nome); ?>" required>
                             <button class="link-atualizar" type="submit" name="salvar_nome_email">Salvar</button>
                             <button type="button" class="cancelar-edicao">Cancelar</button>
@@ -161,8 +166,10 @@ $conn->close();
                     <div class="linha">
                         <label>Endereço de email</label>
                         <span id="email-usuario-valor"><?php echo htmlspecialchars($email); ?></span>
-                        <form id="form-email" action="" method="POST" style="display:none; align-items:center; gap:10px;">
-                            <input type="email" name="novo_email" value="<?php echo htmlspecialchars($email); ?>" required>
+                        <form id="form-email" action="" method="POST"
+                            style="display:none; align-items:center; gap:10px;">
+                            <input type="email" name="novo_email" value="<?php echo htmlspecialchars($email); ?>"
+                                required>
                             <button class="link-atualizar" type="submit" name="salvar_nome_email">Salvar</button>
                             <button type="button" class="cancelar-edicao">Cancelar</button>
                         </form>
@@ -174,61 +181,61 @@ $conn->close();
     </div>
 
 </body>
+
 </html>
 
 <script>
-// filepath: c:\xampp\htdocs\ToDo\View\userpage.php
-document.addEventListener("DOMContentLoaded", function() {
-    // Foto de perfil (já existente)
-    const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
-    const inputFoto = document.getElementById("input-foto-perfil");
-    const formFoto = document.getElementById("form-foto-perfil");
+    // filepath: c:\xampp\htdocs\ToDo\View\userpage.php
+    document.addEventListener("DOMContentLoaded", function () {
+        // Foto de perfil (já existente)
+        const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
+        const inputFoto = document.getElementById("input-foto-perfil");
+        const formFoto = document.getElementById("form-foto-perfil");
 
-    btnAtualizarFoto.addEventListener("click", function() {
-        inputFoto.click();
+        btnAtualizarFoto.addEventListener("click", function () {
+            inputFoto.click();
+        });
+
+        inputFoto.addEventListener("change", function () {
+            if (inputFoto.files.length > 0) {
+                formFoto.submit();
+            }
+        });
+
+        // Nome de usuário
+        const editarNomeBtn = document.querySelector(".editar-nome");
+        const nomeValor = document.getElementById("nome-usuario-valor");
+        const formNome = document.getElementById("form-nome");
+
+        editarNomeBtn.addEventListener("click", function () {
+            nomeValor.style.display = "none";
+            formNome.style.display = "flex";
+            editarNomeBtn.style.display = "none";
+            formNome.querySelector("input").focus();
+        });
+
+        formNome.querySelector(".cancelar-edicao").addEventListener("click", function () {
+            nomeValor.style.display = "";
+            formNome.style.display = "none";
+            editarNomeBtn.style.display = "";
+        });
+
+        // E-mail
+        const editarEmailBtn = document.querySelector(".editar-email");
+        const emailValor = document.getElementById("email-usuario-valor");
+        const formEmail = document.getElementById("form-email");
+
+        editarEmailBtn.addEventListener("click", function () {
+            emailValor.style.display = "none";
+            formEmail.style.display = "flex";
+            editarEmailBtn.style.display = "none";
+            formEmail.querySelector("input").focus();
+        });
+
+        formEmail.querySelector(".cancelar-edicao").addEventListener("click", function () {
+            emailValor.style.display = "";
+            formEmail.style.display = "none";
+            editarEmailBtn.style.display = "";
+        });
     });
-
-    inputFoto.addEventListener("change", function() {
-        if (inputFoto.files.length > 0) {
-            formFoto.submit();
-        }
-    });
-
-    // Nome de usuário
-    const editarNomeBtn = document.querySelector(".editar-nome");
-    const nomeValor = document.getElementById("nome-usuario-valor");
-    const formNome = document.getElementById("form-nome");
-
-    editarNomeBtn.addEventListener("click", function() {
-        nomeValor.style.display = "none";
-        formNome.style.display = "flex";
-        editarNomeBtn.style.display = "none";
-        formNome.querySelector("input").focus();
-    });
-
-    formNome.querySelector(".cancelar-edicao").addEventListener("click", function() {
-        nomeValor.style.display = "";
-        formNome.style.display = "none";
-        editarNomeBtn.style.display = "";
-    });
-
-    // E-mail
-    const editarEmailBtn = document.querySelector(".editar-email");
-    const emailValor = document.getElementById("email-usuario-valor");
-    const formEmail = document.getElementById("form-email");
-
-    editarEmailBtn.addEventListener("click", function() {
-        emailValor.style.display = "none";
-        formEmail.style.display = "flex";
-        editarEmailBtn.style.display = "none";
-        formEmail.querySelector("input").focus();
-    });
-
-    formEmail.querySelector(".cancelar-edicao").addEventListener("click", function() {
-        emailValor.style.display = "";
-        formEmail.style.display = "none";
-        editarEmailBtn.style.display = "";
-    });
-});
 </script>
-
