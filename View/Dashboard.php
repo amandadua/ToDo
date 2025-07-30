@@ -31,7 +31,84 @@ if ($result->num_rows === 1) {
     $email = "email@exemplo.com";
 }
 
+$tarefas_result = null;
+if (isset($_GET['projeto_id'])) {
+    $projeto_id = (int)$_GET['projeto_id'];
+
+    $stmt = $conn->prepare("SELECT * FROM task WHERE projeto_id = ?");
+    $stmt->bind_param("i", $projeto_id);
+    $stmt->execute();
+    $tarefas_result = $stmt->get_result();
+}
+
+
+
+// Buscar ID, nome e email do usuário
+$stmt = $conn->prepare("SELECT id, user_fullname, user_email FROM user WHERE user_email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $usuario = $result->fetch_assoc();
+    $usuario_id = $usuario['id'];
+    $nome = $usuario['user_fullname'];
+    $email = $usuario['user_email'];
+} else {
+    // Caso não encontre, redireciona para o login
+    header('Location: login.php');
+    exit();
+}
+
+
+
+
+
+$stmt = $conn->prepare("SELECT id, name FROM project WHERE user_id = ?");
+$stmt->bind_param("i", $usuario_id);
+$stmt->execute();
+$projetos_result = $stmt->get_result();
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome_projeto'])) {
+    $nomeProjeto = trim($_POST['nome_projeto']);
+    if (!empty($nomeProjeto)) {
+        // cor aleatória, pode ajustar como quiser
+        $cores = ['red', 'purple', 'blue', 'green', 'orange'];
+        $cor = $cores[array_rand($cores)];
+
+        $stmt = $conn->prepare("INSERT INTO project (user_id, name) VALUES (?, ?)");
+        $stmt->bind_param("is", $usuario_id, $nomeProjeto);
+        $stmt->execute();
+
+        // Redireciona para atualizar a página e ver o projeto criado
+        header("Location: dashboard.php");
+        exit();
+    }
+}
+
+$nomeProjetoAtual = '';
+if (isset($projeto_id)) {
+    $stmt = $conn->prepare("SELECT name FROM project WHERE id = ?");
+    $stmt->bind_param("i", $projeto_id);
+    $stmt->execute();
+    $resultNomeProjeto = $stmt->get_result();
+    if ($resultNomeProjeto->num_rows === 1) {
+        $rowProjeto = $resultNomeProjeto->fetch_assoc();
+        $nomeProjetoAtual = $rowProjeto['name'];
+    }
+}
+
+
+$numTarefas = 0;
+if ($tarefas_result) {
+    $numTarefas = $tarefas_result->num_rows;
+}
+
+
 $conn->close(); 
+
+
 
 ?>
 <!DOCTYPE html>
@@ -84,16 +161,32 @@ $conn->close();
                 <div class="section-header">
                     <i class="fas fa-folder-plus"></i>
                     <button class="Add-Projeto">Adicionar Projeto</button>
+
+
+                    <form id="formNovoProjeto" action="dashboard.php" method="POST" style="display:none; margin-top:10px;">
+    <input type="text" name="nome_projeto" placeholder="Nome do projeto" required>
+    <button type="submit">Criar Projeto</button>
+    <button type="button" id="btnCancelarProjeto">Cancelar</button>
+</form>
+
+
                 </div>
                 <div class="project-list">
-                    <div class="project-item">
-                        <span class="project-name">Projeto 1</span>
-                        <div class="project-indicator red"></div>
-                    </div>
-                    <div class="project-item">
-                        <span class="project-name">Projeto 2</span>
-                        <div class="project-indicator purple"></div>
-                    </div>
+
+
+                                                <div class="project-item">
+                                                    <?php while ($projeto = $projetos_result->fetch_assoc()): ?>
+                                                        <div class="project-item">
+                                                            <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">
+                                                                <span class="project-name"><?php echo htmlspecialchars($projeto['name']); ?></span>
+                                                 <div class="project-indicator <?php echo htmlspecialchars($projeto['cor'] ?? 'blue'); ?>"></div>
+                                    </a>
+                                </div>
+                            <?php endwhile; ?>
+                         </div>
+
+
+                 
                 </div>
             </div>
 
@@ -119,7 +212,8 @@ $conn->close();
             <!-- Header -->
             <header class="header">
                 <div class="breadcrumb">
-                    <span>Projeto 1</span>
+                   <span><?php echo htmlspecialchars($nomeProjetoAtual ?: 'Nenhum projeto'); ?></span>
+
                     <i class="fas fa-chevron-right"></i>
                     <span>Dashboard</span>
                 </div>
@@ -135,27 +229,45 @@ $conn->close();
                 <!-- Top Row Cards -->
                 <div class="cards-row top-row">
                     <!-- Recent Tasks Card -->
+
                     <div class="card large-card">
-                        <div class="card-header">
-                            <h3>Tarefas Recentes</h3>
-                        </div>
-                        <div class="card-content">
-                            <div class="task-item">
-                                <i class="fas fa-cog task-icon"></i>
-                                <div class="task-info">
-                                    <span class="task-name">Tarefa 1</span>
-                                    <span class="task-time">Criado a 10 minutos</span>
-                                </div>
-                            </div>
-                            <div class="task-item">
-                                <i class="fas fa-cog task-icon"></i>
-                                <div class="task-info">
-                                    <span class="task-name">Tarefa 2</span>
-                                    <span class="task-time">Criado a 10 minutos</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <?php if ($tarefas_result && $tarefas_result->num_rows > 0): ?>
+        <?php while ($tarefa = $tarefas_result->fetch_assoc()): ?>
+            <div class="task-item">
+                <i class="fas fa-cog task-icon"></i>
+                <div class="task-info">
+                    <span class="task-name"><?php echo htmlspecialchars($tarefa['titulo']); ?></span>
+                    <span class="task-time">
+                        <?php echo date('d/m/Y H:i', strtotime($tarefa['data_criacao'])); ?>
+                    </span>
+                </div>
+            </div>
+        <?php endwhile; ?>
+    <?php else: ?>
+        <p>Nenhuma tarefa para este projeto.</p>
+    <?php endif; ?>
+</div>
+                                <!-- <div class="card large-card">
+                                    <div class="card-header">
+                                        <h3>Tarefas Recentes</h3>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="task-item">
+                                            <i class="fas fa-cog task-icon"></i>
+                                            <div class="task-info">
+                                                <span class="task-name">Tarefa 1</span>
+                                                <span class="task-time">Criado a 10 minutos</span>
+                                            </div>
+                                        </div>
+                                        <div class="task-item">
+                                            <i class="fas fa-cog task-icon"></i>
+                                            <div class="task-info">
+                                                <span class="task-name">Tarefa 2</span>
+                                                <span class="task-time">Criado a 10 minutos</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
 
                     <!-- Recent Notifications Card -->
                     <div class="card large-card">
@@ -193,7 +305,13 @@ $conn->close();
                             <h3>Tarefas Prontas</h3>
                         </div>
                         <div class="card-content">
-                            <div class="stat-number">0</div>
+                            <!-- <div class="stat-number">0</div> -->
+                             
+                    
+                                <div class="card-content">
+                                    <div class="stat-number"><?php echo $numTarefas; ?></div>
+                                </div>
+                           
                         </div>
                     </div>
 
@@ -209,6 +327,11 @@ $conn->close();
             </section>
         </main>
     </div>
+
+
+
+
+
     <script>
         // Dashboard ToDo - Interatividade
 document.addEventListener("DOMContentLoaded", function() {
@@ -356,28 +479,46 @@ function adicionarEventoProjeto(item) {
 // Inicializa listeners para projetos existentes
 document.querySelectorAll(".project-item").forEach(adicionarEventoProjeto);
 
-// Adicionar novo projeto ao clicar no botão
+
+
+
 const addProjectButton = document.querySelector(".Add-Projeto");
-if (addProjectButton) {
-    addProjectButton.addEventListener("click", function(e) {
-        e.stopPropagation();
-        const projectName = prompt("Digite o nome do novo projeto:");
-        if (projectName && projectName.trim()) {
-            const projectList = document.querySelector(".project-list");
-            const newProject = document.createElement("div");
-            newProject.className = "project-item";
-            newProject.innerHTML = `
-                <span class="project-name">${projectName.trim()}</span>
-                <div class="project-indicator"></div>
-            `;
-            // Cor aleatória para o indicador
-            const colors = ["red", "purple", "blue", "green", "orange"];
-            newProject.querySelector(".project-indicator").classList.add(colors[Math.floor(Math.random() * colors.length)]);
-            adicionarEventoProjeto(newProject); // <-- Aqui está o segredo!
-            projectList.appendChild(newProject);
-        }
-    });
-}
+const formNovoProjeto = document.getElementById("formNovoProjeto");
+const btnCancelarProjeto = document.getElementById("btnCancelarProjeto");
+
+addProjectButton.addEventListener("click", function() {
+    formNovoProjeto.style.display = "block";
+    addProjectButton.style.display = "none";
+});
+
+btnCancelarProjeto.addEventListener("click", function() {
+    formNovoProjeto.style.display = "none";
+    addProjectButton.style.display = "block";
+});
+
+
+// Adicionar novo projeto ao clicar no botão
+// const addProjectButton = document.querySelector(".Add-Projeto");
+// if (addProjectButton) {
+//     addProjectButton.addEventListener("click", function(e) {
+//         e.stopPropagation();
+//         const projectName = prompt("Digite o nome do novo projeto:");
+//         if (projectName && projectName.trim()) {
+//             const projectList = document.querySelector(".project-list");
+//             const newProject = document.createElement("div");
+//             newProject.className = "project-item";
+//             newProject.innerHTML = `
+//                 <span class="project-name">${projectName.trim()}</span>
+//                 <div class="project-indicator"></div>
+//             `;
+//             // Cor aleatória para o indicador
+//             const colors = ["red", "purple", "blue", "green", "orange"];
+//             newProject.querySelector(".project-indicator").classList.add(colors[Math.floor(Math.random() * colors.length)]);
+//             adicionarEventoProjeto(newProject); // <-- Aqui está o segredo!
+//             projectList.appendChild(newProject);
+//         }
+//     });
+// }
         </script>
 </body>
 </html>
