@@ -190,6 +190,26 @@ body {
     font-size: 16px;
 }
 
+.user-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Remove o fundo azul quando houver imagem */
+.user-avatar img {
+    background: none;
+}
+.user-avatar:has(img) {
+    background: none !important;
+}
+
+.user-avatar.sem-fundo {
+    background: none !important;
+}
+
 .user-info {
     flex: 1;
 }
