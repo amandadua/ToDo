@@ -36,7 +36,7 @@
             <div class="projects-section">
                 <div class="section-header">
                     <i class="fas fa-folder-plus"></i>
-                    <span>Adicionar Projeto</span>
+                    <button class="Add-Projeto">Adicionar Projeto</button>
                 </div>
                 <div class="project-list">
                     <div class="project-item">
@@ -60,7 +60,9 @@
                     <div class="user-email">nicollasrio2270@gmail.com</div>
                 </div>
                 <div class="user-menu">
+                    <a href="userpage.php" class="user-menu">
                     <i class="fas fa-ellipsis-vertical"></i>
+                    </a>
                 </div>
             </div>
         </aside>
@@ -133,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    
     // Responsividade - ajustar sidebar em telas pequenas (comum a ambas as páginas)
     function handleResize() {
         const sidebar = document.querySelector(".sidebar");
@@ -328,6 +331,59 @@ function toggleSidebar() {
     } else {
         sidebar.style.transform = "translateX(-100%)";
     }
+}
+const projectItems = document.querySelectorAll(".project-item");
+projectItems.forEach(item => {
+    item.addEventListener("click", function() {
+        const projectName = this.querySelector(".project-name").textContent;
+        console.log(`Projeto selecionado: ${projectName}`);
+        // Aqui você pode adicionar lógica para trocar de projeto
+    });
+});
+
+// Função para atualizar o breadcrumb com o projeto selecionado
+function atualizarBreadcrumbProjeto(nomeProjeto) {
+    const breadcrumb = document.querySelector(".breadcrumb");
+    if (breadcrumb) {
+        const spans = breadcrumb.querySelectorAll("span");
+        if (spans.length > 0) {
+            spans[0].textContent = nomeProjeto;
+        }
+    }
+}
+
+// Função para adicionar o event listener de seleção de projeto
+function adicionarEventoProjeto(item) {
+    item.addEventListener("click", function() {
+        const projectName = this.querySelector(".project-name").textContent;
+        atualizarBreadcrumbProjeto(projectName);
+    });
+}
+
+// Inicializa listeners para projetos existentes
+document.querySelectorAll(".project-item").forEach(adicionarEventoProjeto);
+
+// Adicionar novo projeto ao clicar no botão
+const addProjectButton = document.querySelector(".Add-Projeto");
+if (addProjectButton) {
+    addProjectButton.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const projectName = prompt("Digite o nome do novo projeto:");
+        if (projectName && projectName.trim()) {
+            const projectList = document.querySelector(".project-list");
+            const newProject = document.createElement("div");
+            newProject.className = "project-item";
+            newProject.innerHTML = `
+                <span class="project-name">${projectName.trim()}</span>
+                <div class="project-indicator"></div>
+            `;
+            // Cor aleatória para o indicador
+            const colors = ["red", "purple", "blue", "green", "orange"];
+            newProject.querySelector(".project-indicator").classList.add(colors[Math.floor(Math.random() * colors.length)]);
+            adicionarEventoProjeto(newProject);
+            projectList.appendChild(newProject);
+        }
+    });
 }
     </script>
     
