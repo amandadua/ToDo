@@ -12,12 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     if ($userController->login($email, $password)) {
+
+        $_SESSION['user_email'] = $email;
         header('Location: ../View/Dashboard.php');
+
         exit();
     } else {
         $loginMessage = "Email ou senha incorretos.";
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>

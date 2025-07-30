@@ -3,6 +3,8 @@ namespace Controller;
 
 use PDO;
 
+
+
 class UserController {
     private $pdo;
 
@@ -29,5 +31,23 @@ class UserController {
 
         return false;
     }
+
+    public function checkUserByEmail($email) {
+    $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE user_email = :email");
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+    $count = $stmt->fetchColumn();
+    return $count > 0;
+    }
+
+    public function createUser($user_fullname, $email, $password) {
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $this->pdo->prepare("INSERT INTO user (user_fullname, user_email, password) VALUES (:user_fullname, :email, :password)");
+    $stmt->bindParam(':user_fullname', $user_fullname, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+    return $stmt->execute();
 }
+}
+
 ?>
