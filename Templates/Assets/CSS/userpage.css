@@ -116,14 +116,62 @@
 .campo-perfil {
     padding-bottom: 20px;
     border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
+    gap: 20px;
 }
 
 .campo-perfil .linha {
     display: flex;
     align-items: center;
-    gap: 20px;
-    justify-content: space-between;
+    gap: 200px;
+    flex: 1;
+    position: relative;
+}
+
+.campo-perfil .linha > * {
+    /* Garante alinhamento vertical dos elementos filhos */
+    align-items: center;
+    display: flex;
+}
+
+.campo-perfil .linha form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.campo-perfil .linha button.link-atualizar,
+.campo-perfil .linha button.cancelar-edicao {
+    margin-left: 10px;
+    min-width: 80px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Remove o deslocamento vertical */
+    vertical-align: middle;
+}
+
+.campo-perfil .linha button.cancelar-edicao {
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 18px;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1px 4px #00000010;
+    outline: none;
+}
+
+.campo-perfil .linha button.cancelar-edicao:hover {
+    background: #e74c3c;
+    color: #fff;
 }
 
 .campo-perfil label {
@@ -140,22 +188,30 @@
     margin-left: 31px;
 }
 
-#email-usuario{
-    color: #ffffff68;
-    font-size: 17px;
-    margin-right: 150px;
+/* Alinha nome de usuário um pouco mais à esquerda */
+#nome-usuario,
+#nome-usuario-valor {
+    display: flex;
+    justify-content: flex-start;   /* Alinha à esquerda */
+    align-items: center;
+    width: 100%;
+    color: #fff;
+    font-size: 20px;
+    margin: 0 0 0 30px;           /* Espaço à esquerda */
+    text-align: left;
 }
 
+/* Centraliza a foto de perfil na linha */
 .campo-perfil .foto-perfil {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100px;
     height: 100px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid #555;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: #222;
 }
 
@@ -166,17 +222,46 @@
     border-radius: 50%;
 }
 
+.campo-perfil input[type="text"],
+.campo-perfil input[type="email"] {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    width: 220px;
+    margin-right: 10px;
+}
+
+.campo-perfil input[type="text"]:focus,
+.campo-perfil input[type="email"]:focus {
+    border: 1.5px solid #4fd1c7;
+}
+
 .link-atualizar {
     color: #ffffff;
     font-weight: bold;
     font-size: 17px;
-    transition: color 0.2s ease;
+    background: #23272f;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+    box-shadow: 0 1px 4px #00000010;
+    outline: none;
     flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .link-atualizar:hover {
-    text-decoration: underline;
-    color: #ffffff;
+    background: #4fd1c7;
+    color: #23272f;
+    box-shadow: 0 2px 8px #00000022;
+    text-decoration: none;
 }
 
 .botao-opcoes {
@@ -196,4 +281,21 @@
 .botao-opcoes:hover {
     background-color: #333333;
     color: #fff;
+}
+
+/* Alinha os botões "Alterar" do nome e do email na mesma posição */
+.campo-perfil .linha .link-atualizar.editar-nome,
+.campo-perfil .linha .link-atualizar.editar-email {
+    min-width: 80px;
+    height: 38px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Garante que o botão "Alterar" do email fique alinhado ao do nome */
+.campo-perfil .linha .link-atualizar.editar-email {
+    /* Se necessário, ajuste o margin-right para alinhar perfeitamente */
+    margin-right: 0;
 }

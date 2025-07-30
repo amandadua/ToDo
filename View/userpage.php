@@ -38,6 +38,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['foto']) && $_FILES['
     }
 }
 
+// Atualiza nome ou email se o formulário foi enviado
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_nome_email'])) {
+    if (isset($_POST['novo_nome']) && !empty($_POST['novo_nome'])) {
+        $novo_nome = $_POST['novo_nome'];
+        $sql = "UPDATE user SET user_fullname = ? WHERE user_email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $novo_nome, $email);
+        $stmt->execute();
+        $mensagem = "Nome atualizado com sucesso!";
+        // Atualiza a variável para exibir o novo nome imediatamente
+        $nome = $novo_nome;
+    }
+    if (isset($_POST['novo_email']) && !empty($_POST['novo_email'])) {
+        $novo_email = $_POST['novo_email'];
+        $sql = "UPDATE user SET user_email = ? WHERE user_email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $novo_email, $email);
+        $stmt->execute();
+        $mensagem = "E-mail atualizado com sucesso!";
+        // Atualiza a sessão e variável para exibir o novo email imediatamente
+        $_SESSION['user_email'] = $novo_email;
+        $email = $novo_email;
+    }
+}
+
 // Busca os dados do usuário
 $sql = "SELECT user_fullname, user_email, foto FROM user WHERE user_email = ?";
 $stmt = $conn->prepare($sql);
@@ -122,20 +147,26 @@ $conn->close();
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Nome de usuário</label>
-                       <span class="valor" id="nome-usuario"><?php echo htmlspecialchars($nome); ?></span>
-
-                        <button class="link-atualizar">Atualizar nome de usuário</button>
+                        <span id="nome-usuario-valor"><?php echo htmlspecialchars($nome); ?></span>
+                        <form id="form-nome" action="" method="POST" style="display:none; align-items:center; gap:10px;">
+                            <input type="text" name="novo_nome" value="<?php echo htmlspecialchars($nome); ?>" required>
+                            <button class="link-atualizar" type="submit" name="salvar_nome_email">Salvar</button>
+                            <button type="button" class="cancelar-edicao">Cancelar</button>
+                        </form>
+                        <button class="link-atualizar editar-nome" type="button">Alterar</button>
                     </div>
                 </div>
 
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Endereço de email</label>
-                        <span class="valor" id="email-usuario"><?php echo htmlspecialchars($email); ?></span>
-
-                        <button class="botao-opcoes">
-                            <i class="fi fi-rr-menu-dots"></i>
-                        </button>
+                        <span id="email-usuario-valor"><?php echo htmlspecialchars($email); ?></span>
+                        <form id="form-email" action="" method="POST" style="display:none; align-items:center; gap:10px;">
+                            <input type="email" name="novo_email" value="<?php echo htmlspecialchars($email); ?>" required>
+                            <button class="link-atualizar" type="submit" name="salvar_nome_email">Salvar</button>
+                            <button type="button" class="cancelar-edicao">Cancelar</button>
+                        </form>
+                        <button class="link-atualizar editar-email" type="button">Alterar</button>
                     </div>
                 </div>
             </section>
@@ -148,6 +179,7 @@ $conn->close();
 <script>
 // filepath: c:\xampp\htdocs\ToDo\View\userpage.php
 document.addEventListener("DOMContentLoaded", function() {
+    // Foto de perfil (já existente)
     const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
     const inputFoto = document.getElementById("input-foto-perfil");
     const formFoto = document.getElementById("form-foto-perfil");
@@ -160,6 +192,42 @@ document.addEventListener("DOMContentLoaded", function() {
         if (inputFoto.files.length > 0) {
             formFoto.submit();
         }
+    });
+
+    // Nome de usuário
+    const editarNomeBtn = document.querySelector(".editar-nome");
+    const nomeValor = document.getElementById("nome-usuario-valor");
+    const formNome = document.getElementById("form-nome");
+
+    editarNomeBtn.addEventListener("click", function() {
+        nomeValor.style.display = "none";
+        formNome.style.display = "flex";
+        editarNomeBtn.style.display = "none";
+        formNome.querySelector("input").focus();
+    });
+
+    formNome.querySelector(".cancelar-edicao").addEventListener("click", function() {
+        nomeValor.style.display = "";
+        formNome.style.display = "none";
+        editarNomeBtn.style.display = "";
+    });
+
+    // E-mail
+    const editarEmailBtn = document.querySelector(".editar-email");
+    const emailValor = document.getElementById("email-usuario-valor");
+    const formEmail = document.getElementById("form-email");
+
+    editarEmailBtn.addEventListener("click", function() {
+        emailValor.style.display = "none";
+        formEmail.style.display = "flex";
+        editarEmailBtn.style.display = "none";
+        formEmail.querySelector("input").focus();
+    });
+
+    formEmail.querySelector(".cancelar-edicao").addEventListener("click", function() {
+        emailValor.style.display = "";
+        formEmail.style.display = "none";
+        editarEmailBtn.style.display = "";
     });
 });
 </script>
