@@ -103,6 +103,17 @@ body {
     margin-bottom: auto;
     justify-content: bottom;
 }
+.Add-Projeto {
+    background-color: #4fd1c7;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
 
 .section-header {
     display: flex;
