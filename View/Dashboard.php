@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $email = $_SESSION['user_email'];
 
 // Busca os dados do usuário
-$sql = "SELECT user_fullname, user_email FROM user WHERE user_email = ?";
+$sql = "SELECT user_fullname, user_email, foto FROM user WHERE user_email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -25,10 +25,11 @@ if ($result->num_rows === 1) {
     $usuario = $result->fetch_assoc();
     $nome = $usuario['user_fullname'];
     $email = $usuario['user_email'];
+    $foto = !empty($usuario['foto']) ? $usuario['foto'] : '../Images/user.jpg';
 } else {
-    // Caso não encontre o usuário (pode redirecionar ou mostrar erro)
     $nome = "Usuário";
     $email = "email@exemplo.com";
+    $foto = '../Images/user.jpg';
 }
 
 $conn->close(); 
@@ -100,7 +101,11 @@ $conn->close();
             <!-- User Profile -->
             <div class="user-profile">
                 <div class="user-avatar">
-                    <i class="fas fa-user"></i>
+                    <?php if (!empty($foto) && $foto !== '../Images/user.jpg'): ?>
+        <img src="<?php echo htmlspecialchars($foto); ?>" alt="Avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+    <?php else: ?>
+        <i class="fas fa-user"></i>
+    <?php endif; ?>
                 </div>
                 <div class="user-info">
                     <div class="user-name"><?php echo htmlspecialchars($nome); ?></div>
