@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $registerUserMessage = "Já existe um usuário cadastrado com esse endereço de e-mail.";
         } else {
             if ($userController->createUser($user_fullname, $email, $password)) {
-                header('Location: ../View/Dashboard.php');
+                header('Location: ../View/login.php');
                 exit();
             } else {
                 $registerUserMessage = 'Erro ao registrar informações. Tente novamente!';

@@ -5,6 +5,34 @@ if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
     exit();
 }
+
+$conn = new mysqli('localhost', 'root', '', 'todo');
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+    // Pega o email da sessão
+$email = $_SESSION['user_email'];
+
+// Busca os dados do usuário
+$sql = "SELECT user_fullname, user_email FROM user WHERE user_email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $usuario = $result->fetch_assoc();
+    $nome = $usuario['user_fullname'];
+    $email = $usuario['user_email'];
+} else {
+    // Caso não encontre o usuário (pode redirecionar ou mostrar erro)
+    $nome = "Usuário";
+    $email = "email@exemplo.com";
+}
+
+$conn->close(); 
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -75,8 +103,8 @@ if (!isset($_SESSION['user_email'])) {
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="user-info">
-                    <div class="user-name">Nicollas</div>
-                    <div class="user-email">nicollasrio227@gmail.com</div>
+                    <div class="user-name"><?php echo htmlspecialchars($nome); ?></div>
+                    <div class="user-email"><?php echo htmlspecialchars($email); ?></div>
                 </div>
                 <div class="user-menu">
                     <a href="userpage.php" class="user-menu">
@@ -99,7 +127,7 @@ if (!isset($_SESSION['user_email'])) {
 
             <!-- Welcome Section -->
             <section class="welcome-section">
-                <h1 class="welcome-title">Olá, Nicollas!</h1>
+                <h1 class="welcome-title">Olá, <?php echo htmlspecialchars($nome); ?></h1>
             </section>
 
             <!-- Dashboard Cards -->

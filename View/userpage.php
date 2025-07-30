@@ -5,6 +5,34 @@ if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
     exit();
 }
+
+$conn = new mysqli('localhost', 'root', '', 'todo');
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+    // Pega o email da sessão
+$email = $_SESSION['user_email'];
+
+// Busca os dados do usuário
+$sql = "SELECT user_fullname, user_email FROM user WHERE user_email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $usuario = $result->fetch_assoc();
+    $nome = $usuario['user_fullname'];
+    $email = $usuario['user_email'];
+} else {
+    // Caso não encontre o usuário (pode redirecionar ou mostrar erro)
+    $nome = "Usuário";
+    $email = "email@exemplo.com";
+}
+
+$conn->close(); 
+
 ?>
 
 
@@ -64,7 +92,8 @@ if (!isset($_SESSION['user_email'])) {
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Nome de usuário</label>
-                        <span class="valor" id="nome-usuario">Nicollas</span>
+                       <span class="valor" id="nome-usuario"><?php echo htmlspecialchars($nome); ?></span>
+
                         <button class="link-atualizar">Atualizar nome de usuário</button>
                     </div>
                 </div>
@@ -72,7 +101,8 @@ if (!isset($_SESSION['user_email'])) {
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Endereço de email</label>
-                        <span class="valor" id="email-usuario">nicollasrio227@gmail.com</span>
+                        <span class="valor" id="email-usuario"><?php echo htmlspecialchars($email); ?></span>
+
                         <button class="botao-opcoes">
                             <i class="fi fi-rr-menu-dots"></i>
                         </button>
