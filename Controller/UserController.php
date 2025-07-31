@@ -6,6 +6,7 @@ use PDO;
 
 
 class UserController {
+    public $conn;
     private $pdo;
 
     public function __construct() {
@@ -40,14 +41,30 @@ class UserController {
     return $count > 0;
     }
 
-    public function createUser($user_fullname, $email, $password) {
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $this->pdo->prepare("INSERT INTO user (user_fullname, user_email, password) VALUES (:user_fullname, :email, :password)");
-    $stmt->bindParam(':user_fullname', $user_fullname, PDO::PARAM_STR);
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
-    return $stmt->execute();
-}
-}
+
+ public function createUser($user_fullname, $email, $password) {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->pdo->prepare("INSERT INTO user (user_fullname, user_email, password) VALUES (:user_fullname, :email, :password)");
+        $stmt->bindParam(':user_fullname', $user_fullname, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        return $stmt->execute();
+    } // <-- aqui termina o método, não a classe!
+
+    public function deletarConta($email) {
+        $stmt = $this->pdo->prepare("DELETE FROM user WHERE user_email = ?");
+        $stmt->execute([$email]);
+    }
+
+    public function alterarSenha($email, $novaSenha) {
+        $hash = password_hash($novaSenha, PASSWORD_DEFAULT);
+        $stmt = $this->pdo->prepare("UPDATE user SET password = :senha WHERE user_email = :email");
+        $stmt->bindParam(':senha', $hash, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+} // <-- só UM fechamento da classe aqui!
+
+
 
 ?>

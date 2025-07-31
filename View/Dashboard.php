@@ -299,25 +299,23 @@ $conn->close();
                     <div class="card stat-card">
                         <div class="card-header">
                             <h3>Tarefas em Progresso</h3>
-                        </div>
-                        <div class="card-content">
+                          </div>
+                          <div class="card-content">
                             <div class="stat-number">0</div>
+                          </div>
                         </div>
-                    </div>
 
-                    <div class="card stat-card">
+                   
+                    <div class="card stat-card"> // Exibe o número de tarefas prontas
                         <div class="card-header">
                             <h3>Tarefas Prontas</h3>
-                        </div>
-                        <div class="card-content">
-                            <!-- <div class="stat-number">0</div> -->
-                             
-                    
-                                <div class="card-content">
-                                    <div class="stat-number"><?php echo $numTarefas; ?></div>
-                                </div>
-                           
-                        </div>
+                            </div>
+                            <div class="card-content">  
+                             <div class="card-content">
+                                 <div class="stat-number"><?php echo $numTarefas; ?></div> 
+                             </div>
+
+                         </div>
                     </div>
 
                     <div class="card stat-card">

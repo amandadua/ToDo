@@ -1,5 +1,4 @@
 <?php
-
 namespace Model;
 
 require_once __DIR__ . '/Connection.php'; 

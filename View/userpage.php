@@ -1,5 +1,20 @@
 <?php
+
 session_start();
+require_once '../Controller/UserController.php';
+use Controller\UserController;
+
+$userController = new UserController();
+
+if (isset($_POST['deletar_conta'])) {
+    $email = $_SESSION['user_email']; // ou o ID do usuário, se preferir
+    $userController->deletarConta($email); // Implemente esse método no seu controller
+    session_destroy();
+    header('Location: login.php');
+    exit();
+}
+
+
 
 if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
@@ -81,6 +96,12 @@ if ($result->num_rows === 1) {
     $foto = '../Images/user.jpg';
 }
 
+if (isset($_POST['nova_senha'])) {
+    $novaSenha = $_POST['nova_senha'];
+    $userController->alterarSenha($email, $novaSenha);
+    $mensagem = "Senha alterada com sucesso!";
+}
+
 $conn->close();
 ?>
 
@@ -124,6 +145,12 @@ $conn->close();
                     </div>
                 </nav>
             </aside>
+
+
+
+
+
+
 
             <section class="secao-perfil">
                 <h1>Detalhes do perfil</h1>
@@ -170,6 +197,47 @@ $conn->close();
                     </div>
                 </div>
             </section>
+
+
+
+
+
+
+
+        <section class="secao-seguranca">
+                <h1 id=linha2>Segurança</h1>
+                
+                <div class="campo-perfil">
+                    <div class="linha">
+                        <label>Senha</label>
+                        <span>******</span>
+                        <button class="link-atualizar-foto" type="button">Alterar senha</button>
+                    </div>
+                </div>
+
+                <!-- <div class="campo-perfil">
+                    <div id=linha2 class="linha">
+                        <label>Deletar conta</label>
+    
+    
+                        <button id=deletar class="link-atualizar editar-nome" type="button">Deletar conta</button>
+                    </div>
+                </div> -->
+                
+<div class="campo-perfil">
+    <div id="linha2" class="linha">
+        <label>Deletar conta</label>
+        <form method="POST" onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');" style="margin:0;">
+            <button id="deletar" class="link-atualizar editar-nome" type="submit" name="deletar_conta">Deletar conta</button>
+        </form>
+    </div>
+</div>
+        
+
+
+            </section>
+
+            
         </main>
     </div>
 
@@ -179,6 +247,22 @@ $conn->close();
 <script>
 // filepath: c:\xampp\htdocs\ToDo\View\userpage.php
 document.addEventListener("DOMContentLoaded", function() {
+
+ const btnAlterarSenha = document.getElementById("btn-alterar-senha");
+    const formAlterarSenha = document.getElementById("form-alterar-senha");
+    const btnCancelarAlterarSenha = document.getElementById("cancelar-alterar-senha");
+
+    btnAlterarSenha.addEventListener("click", function() {
+        formAlterarSenha.style.display = "block";
+        btnAlterarSenha.style.display = "none";
+    });
+
+    btnCancelarAlterarSenha.addEventListener("click", function() {
+        formAlterarSenha.style.display = "none";
+        btnAlterarSenha.style.display = "";
+    });
+
+
     // Foto de perfil (já existente)
     const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
     const inputFoto = document.getElementById("input-foto-perfil");
@@ -230,5 +314,29 @@ document.addEventListener("DOMContentLoaded", function() {
         editarEmailBtn.style.display = "";
     });
 });
+
+  // Alternância entre Perfil e Segurança
+    const perfilSection = document.querySelector('.secao-perfil');
+    const segurancaSection = document.querySelector('.secao-seguranca');
+    const navPerfil = document.querySelector('.navegacao-barra-lateral .item-navegacao-ativo');
+    const navSeguranca = document.querySelector('.navegacao-barra-lateral .item-navegacao');
+
+    // Mostra só perfil ao carregar
+    perfilSection.style.display = 'block';
+    segurancaSection.style.display = 'none';
+
+    navPerfil.addEventListener('click', function() {
+        perfilSection.style.display = 'block';
+        segurancaSection.style.display = 'none';
+        navPerfil.classList.add('item-navegacao-ativo');
+        navSeguranca.classList.remove('item-navegacao-ativo');
+    });
+
+    navSeguranca.addEventListener('click', function() {
+        perfilSection.style.display = 'none';
+        segurancaSection.style.display = 'block';
+        navSeguranca.classList.add('item-navegacao-ativo');
+        navPerfil.classList.remove('item-navegacao-ativo');
+    });
 </script>
 

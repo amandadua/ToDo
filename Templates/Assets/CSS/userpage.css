@@ -99,12 +99,42 @@
     background-color: #333333;
 }
 
+.secao-seguranca {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 .secao-perfil {
     flex: 1;
     padding: 30px;
     display: flex;
     flex-direction: column;
     gap: 25px;
+}
+
+#deletar{
+    background-color: rgba(85, 25, 25, 0.563);
+    color: rgb(171, 10, 10);
+}
+
+
+#linha2 button{
+    margin-top: 10px;
+}
+.secao-seguranca .linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.secao-seguranca h1{
+    font-size: 1.8em;
+    color: #fff;
+    margin-bottom: 30px;
 }
 
 .secao-perfil h1 {
