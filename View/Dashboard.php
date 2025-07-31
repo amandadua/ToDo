@@ -250,7 +250,7 @@ $conn->close();
                         </div>
                     </div>
 
-                    <div class="card stat-card"> // Exibe o número de tarefas prontas
+                    <div class="card stat-card"> 
                         <div class="card-header">
                             <h3>Tarefas Prontas</h3>
                         </div>

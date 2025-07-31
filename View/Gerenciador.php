@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_email'])) {
     exit();
 }
 
-// Conecta ao banco
+// Conecta o banco
 $conn = new mysqli('localhost', 'root', '', 'todo');
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 // Pega o email da sessão
 $email = $_SESSION['user_email'];
 
-// Busca os dados do usuário (com id e foto)
+// Busca dos dados do usuário
 $sql = "SELECT id, user_fullname, user_email, foto FROM user WHERE user_email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -33,38 +33,14 @@ if ($result->num_rows === 1) {
     exit();
 }
 
-// Buscar projetos do usuário
-$stmt = $conn->prepare("SELECT id, name FROM project WHERE user_id = ?");
-$stmt->bind_param("i", $usuario_id);
-$stmt->execute();
-$projetos_result = $stmt->get_result();
-
-// Buscar tarefas do projeto selecionado
 $tarefas_result = null;
-$projeto_id = null;
 if (isset($_GET['projeto_id'])) {
     $projeto_id = (int) $_GET['projeto_id'];
+
     $stmt = $conn->prepare("SELECT * FROM task WHERE projeto_id = ?");
     $stmt->bind_param("i", $projeto_id);
     $stmt->execute();
     $tarefas_result = $stmt->get_result();
-}
-
-// Buscar ID, nome e email do usuário
-$stmt = $conn->prepare("SELECT id, user_fullname, user_email FROM user WHERE user_email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-    $usuario = $result->fetch_assoc();
-    $usuario_id = $usuario['id'];
-    $nome = $usuario['user_fullname'];
-    $email = $usuario['user_email'];
-} else {
-    // Caso não encontre, redireciona para o login
-    header('Location: login.php');
-    exit();
 }
 
 $stmt = $conn->prepare("SELECT id, name FROM project WHERE user_id = ?");
@@ -102,14 +78,12 @@ if (isset($projeto_id)) {
     }
 }
 
-
 $numTarefas = 0;
 if ($tarefas_result) {
     $numTarefas = $tarefas_result->num_rows;
 }
 
 $conn->close();
-
 ?>
 
 <!DOCTYPE html>
@@ -119,6 +93,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo | Lista de Tarefas</title>
+    <link rel="stylesheet" href="../Templates/Assets/CSS/Dashboard.css">
     <link rel="stylesheet" href="../Templates/Assets/CSS/Gerenciador.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -156,20 +131,17 @@ $conn->close();
                     <i class="fas fa-folder-plus"></i>
                     <button class="Add-Projeto">Adicionar Projeto</button>
 
-
-                    <form id="formNovoProjeto" action="dashboard.php" method="POST"
+                    <form id="formNovoProjeto" action="Gerenciador.php" method="POST"
                         style="display:none; margin-top:10px;">
                         <input type="text" name="nome_projeto" placeholder="Nome do projeto" required>
                         <button type="submit">Criar Projeto</button>
                         <button type="button" id="btnCancelarProjeto">Cancelar</button>
                     </form>
 
-
                 </div>
                 <div class="project-list">
 
-
-                    <div class="project-item">
+                    <div id="project-item" class="project-item">
                         <?php while ($projeto = $projetos_result->fetch_assoc()): ?>
                             <div class="project-item">
                                 <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">
@@ -181,8 +153,6 @@ $conn->close();
                             </div>
                         <?php endwhile; ?>
                     </div>
-
-
 
                 </div>
             </div>
@@ -227,14 +197,14 @@ $conn->close();
                     <i class="fas fa-plus"></i> Adicionar Tarefa
                 </button>
                 <?php if ($tarefas_result && $tarefas_result->num_rows > 0): ?>
-                    <?php while ($tarefa = $tarefas_result->fetch_assoc()): ?>
-                        <div class="task-item-row<?php echo $tarefa['completed'] ? ' completed' : ''; ?>">
+                    <?php while ($task = $tarefas_result->fetch_assoc()): ?>
+                        <div class="task-item-row<?php echo $task['completed'] ? ' completed' : ''; ?>">
                             <div class="task-details">
                                 <i
-                                    class="<?php echo $tarefa['completed'] ? 'fas fa-check-circle' : 'far fa-circle'; ?> task-checkbox"></i>
-                                <span class="task-name"><?php echo htmlspecialchars($tarefa['name']); ?></span>
+                                    class="<?php echo $task['completed'] ? 'fas fa-check-circle' : 'far fa-circle'; ?> task-checkbox"></i>
+                                <span class="task-name"><?php echo htmlspecialchars($task['titulo']); ?></span>
                             </div>
-                            <button class="remove-task-button" data-task-id="<?php echo $tarefa['id']; ?>">
+                            <button class="remove-task-button" data-task-id="<?php echo $task['id']; ?>">
                                 <i class="fas fa-minus"></i>
                             </button>
                         </div>
