@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_email'])) {
     exit();
 }
 
-// Conecta ao banco
+// Conecta o banco
 $conn = new mysqli('localhost', 'root', '', 'todo');
 if ($conn->connect_error) {
     die("Erro de conexão: " . $conn->connect_error);
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 // Pega o email da sessão
 $email = $_SESSION['user_email'];
 
-// Busca os dados do usuário (agora com ID e foto)
+// Busca dos dados do usuário
 $sql = "SELECT id, user_fullname, user_email, foto FROM user WHERE user_email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -33,32 +33,6 @@ if ($result->num_rows === 1) {
     exit();
 }
 
-$conn = new mysqli('localhost', 'root', '', 'todo');
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
-
-// Pega o email da sessão
-$email = $_SESSION['user_email'];
-
-// Busca os dados do usuário
-$sql = "SELECT user_fullname, user_email, foto FROM user WHERE user_email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-    $usuario = $result->fetch_assoc();
-    $nome = $usuario['user_fullname'];
-    $email = $usuario['user_email'];
-    $foto = !empty($usuario['foto']) ? $usuario['foto'] : '../Images/user.jpg';
-} else {
-    $nome = "Usuário";
-    $email = "email@exemplo.com";
-    $foto = '../Images/user.jpg';
-}
-
 $tarefas_result = null;
 if (isset($_GET['projeto_id'])) {
     $projeto_id = (int) $_GET['projeto_id'];
@@ -68,29 +42,6 @@ if (isset($_GET['projeto_id'])) {
     $stmt->execute();
     $tarefas_result = $stmt->get_result();
 }
-
-
-
-// Buscar ID, nome e email do usuário
-$stmt = $conn->prepare("SELECT id, user_fullname, user_email FROM user WHERE user_email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 1) {
-    $usuario = $result->fetch_assoc();
-    $usuario_id = $usuario['id'];
-    $nome = $usuario['user_fullname'];
-    $email = $usuario['user_email'];
-} else {
-    // Caso não encontre, redireciona para o login
-    header('Location: login.php');
-    exit();
-}
-
-
-
-
 
 $stmt = $conn->prepare("SELECT id, name FROM project WHERE user_id = ?");
 $stmt->bind_param("i", $usuario_id);
@@ -127,16 +78,12 @@ if (isset($projeto_id)) {
     }
 }
 
-
 $numTarefas = 0;
 if ($tarefas_result) {
     $numTarefas = $tarefas_result->num_rows;
 }
 
-
 $conn->close();
-
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -161,13 +108,12 @@ $conn->close();
             <div class="logo">
 
                 <div class="logo-icon">
-                    <!-- <i class= img src="/ToDo/Templates/Assets/Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt=""></i> -->
                     <img src="../Images/logo_gerenciador_tarefas_menos_3d-removebg-preview.png" alt="">
                 </div>
                 <span class="logo-text">ToDo</span>
             </div>
 
-            <!-- Navigation Menu -->
+            <!-- Menu de Navegação -->
             <nav class="nav-menu">
                 <div class="nav-item active">
                     <i class="fas fa-chart-pie"></i>
@@ -182,12 +128,11 @@ $conn->close();
                 </div>
             </nav>
 
-            <!-- Projects Section -->
+            <!-- Seção de Projetos -->
             <div class="projects-section">
                 <div class="section-header">
                     <i class="fas fa-folder-plus"></i>
                     <button class="Add-Projeto">Adicionar Projeto</button>
-
 
                     <form id="formNovoProjeto" action="dashboard.php" method="POST"
                         style="display:none; margin-top:10px;">
@@ -196,12 +141,10 @@ $conn->close();
                         <button type="button" id="btnCancelarProjeto">Cancelar</button>
                     </form>
 
-
                 </div>
                 <div class="project-list">
 
-
-                    <div id="project-item" class="project-item"  >
+                    <div id="project-item" class="project-item">
                         <?php while ($projeto = $projetos_result->fetch_assoc()): ?>
                             <div class="project-item">
                                 <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">
@@ -214,12 +157,10 @@ $conn->close();
                         <?php endwhile; ?>
                     </div>
 
-
-
                 </div>
             </div>
 
-            <!-- User Profile -->
+            <!-- Perfil do Usuário -->
             <div class="user-profile">
                 <div class="user-avatar">
                     <?php if (!empty($foto) && $foto !== '../Images/user.jpg'): ?>
@@ -241,7 +182,7 @@ $conn->close();
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Conteúdo Principal -->
         <main class="main-content">
             <!-- Header -->
             <header class="header">
@@ -253,16 +194,14 @@ $conn->close();
                 </div>
             </header>
 
-            <!-- Welcome Section -->
+            <!-- Seção de Boas-Vindas -->
             <section class="welcome-section">
                 <h1 class="welcome-title">Olá, <?php echo htmlspecialchars($nome); ?></h1>
             </section>
 
-            <!-- Dashboard Cards -->
+            <!-- Cards do Dashboard -->
             <section class="dashboard-content">
-                <!-- Top Row Cards -->
                 <div class="cards-row top-row">
-                    <!-- Recent Tasks Card -->
 
                     <div class="card large-card">
                         <?php if ($tarefas_result && $tarefas_result->num_rows > 0): ?>
@@ -281,29 +220,7 @@ $conn->close();
                             <p>Nenhuma tarefa para este projeto.</p>
                         <?php endif; ?>
                     </div>
-                    <!-- <div class="card large-card">
-                                    <div class="card-header">
-                                        <h3>Tarefas Recentes</h3>
-                                    </div>
-                                    <div class="card-content">
-                                        <div class="task-item">
-                                            <i class="fas fa-cog task-icon"></i>
-                                            <div class="task-info">
-                                                <span class="task-name">Tarefa 1</span>
-                                                <span class="task-time">Criado a 10 minutos</span>
-                                            </div>
-                                        </div>
-                                        <div class="task-item">
-                                            <i class="fas fa-cog task-icon"></i>
-                                            <div class="task-info">
-                                                <span class="task-name">Tarefa 2</span>
-                                                <span class="task-time">Criado a 10 minutos</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                    <!-- Recent Notifications Card -->
+                    
                     <div class="card large-card">
                         <div class="card-header">
                             <h3>Notificações Recentes</h3>
@@ -314,7 +231,6 @@ $conn->close();
                     </div>
                 </div>
 
-                <!-- Bottom Row Cards -->
                 <div class="cards-row bottom-row">
                     <div class="card stat-card">
                         <div class="card-header">
@@ -328,23 +244,22 @@ $conn->close();
                     <div class="card stat-card">
                         <div class="card-header">
                             <h3>Tarefas em Progresso</h3>
-                          </div>
-                          <div class="card-content">
-                            <div class="stat-number">0</div>
-                          </div>
                         </div>
+                        <div class="card-content">
+                            <div class="stat-number">0</div>
+                        </div>
+                    </div>
 
-                   
                     <div class="card stat-card"> // Exibe o número de tarefas prontas
                         <div class="card-header">
                             <h3>Tarefas Prontas</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-content">
+                                <div class="stat-number"><?php echo $numTarefas; ?></div>
                             </div>
-                            <div class="card-content">  
-                             <div class="card-content">
-                                 <div class="stat-number"><?php echo $numTarefas; ?></div> 
-                             </div>
 
-                         </div>
+                        </div>
                     </div>
 
                     <div class="card stat-card">
@@ -360,21 +275,14 @@ $conn->close();
         </main>
     </div>
 
-
-
-
-
     <script>
-        // Dashboard ToDo - Interatividade
         document.addEventListener("DOMContentLoaded", function () {
 
             // Navegação do menu
             const navItems = document.querySelectorAll(".nav-item");
             navItems.forEach(item => {
                 item.addEventListener("click", function () {
-                    // Remove active de todos os itens
                     navItems.forEach(nav => nav.classList.remove("active"));
-                    // Adiciona active ao item clicado
                     this.classList.add("active");
                 });
             });
@@ -385,7 +293,6 @@ $conn->close();
                 item.addEventListener("click", function () {
                     const projectName = this.querySelector(".project-name").textContent;
                     console.log(`Projeto selecionado: ${projectName}`);
-                    // Aqui você pode adicionar lógica para trocar de projeto
                 });
             });
 
@@ -394,11 +301,9 @@ $conn->close();
             if (userMenu) {
                 userMenu.addEventListener("click", function () {
                     console.log("Menu do usuário clicado");
-                    // Aqui você pode adicionar um dropdown menu
                 });
             }
 
-            // Animação dos cards ao carregar
             const cards = document.querySelectorAll(".card");
             cards.forEach((card, index) => {
                 card.style.opacity = "0";
@@ -477,13 +382,11 @@ $conn->close();
             item.addEventListener("click", function () {
                 const projectName = this.querySelector(".project-name").textContent;
                 console.log(`Projeto selecionado: ${projectName}`);
-                // Aqui você pode adicionar lógica para trocar de projeto
             });
         });
 
         // Função para atualizar o dashboard para o projeto selecionado
         function atualizarDashboardProjeto(nomeProjeto) {
-            // Atualiza breadcrumb
             const breadcrumb = document.querySelector(".breadcrumb");
             if (breadcrumb) {
                 const spans = breadcrumb.querySelectorAll("span");
@@ -491,11 +394,9 @@ $conn->close();
                     spans[0].textContent = nomeProjeto;
                 }
             }
-           
-           
         }
 
-        // Adiciona event listener para todos os projetos (inclusive os novos)
+        // Adiciona event listener para todos os projetos
         function adicionarEventoProjeto(item) {
             item.addEventListener("click", function () {
                 const projectName = this.querySelector(".project-name").textContent;
@@ -522,30 +423,6 @@ $conn->close();
             formNovoProjeto.style.display = "none";
             addProjectButton.style.display = "block";
         });
-
-
-        // Adicionar novo projeto ao clicar no botão
-        // const addProjectButton = document.querySelector(".Add-Projeto");
-        // if (addProjectButton) {
-        //     addProjectButton.addEventListener("click", function(e) {
-        //         e.stopPropagation();
-        //         const projectName = prompt("Digite o nome do novo projeto:");
-        //         if (projectName && projectName.trim()) {
-        //             const projectList = document.querySelector(".project-list");
-        //             const newProject = document.createElement("div");
-        //             newProject.className = "project-item";
-        //             newProject.innerHTML = `
-        //                 <span class="project-name">${projectName.trim()}</span>
-        //                 <div class="project-indicator"></div>
-        //             `;
-        //             // Cor aleatória para o indicador
-        //             const colors = ["red", "purple", "blue", "green", "orange"];
-        //             newProject.querySelector(".project-indicator").classList.add(colors[Math.floor(Math.random() * colors.length)]);
-        //             adicionarEventoProjeto(newProject); // <-- Aqui está o segredo!
-        //             projectList.appendChild(newProject);
-        //         }
-        //     });
-        // }
     </script>
 </body>
 

@@ -163,7 +163,6 @@
 }
 
 .campo-perfil .linha > * {
-    /* Garante alinhamento vertical dos elementos filhos */
     align-items: center;
     display: flex;
 }
@@ -182,7 +181,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Remove o deslocamento vertical */
     vertical-align: middle;
 
 }
@@ -197,7 +195,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Remove o deslocamento vertical */
     vertical-align: middle;
 }
 
@@ -210,7 +207,6 @@
     font-weight: bold;
     font-size: 17px;
     cursor: pointer;
-    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
     box-shadow: 0 1px 4px #00000010;
     outline: none;
 }
@@ -234,20 +230,18 @@
     margin-left: 31px;
 }
 
-/* Alinha nome de usuário um pouco mais à esquerda */
 #nome-usuario,
 #nome-usuario-valor {
     display: flex;
-    justify-content: flex-start;   /* Alinha à esquerda */
+    justify-content: flex-start; 
     align-items: center;
     width: 100%;
     color: #fff;
     font-size: 20px;
-    margin: 0 0 0 30px;           /* Espaço à esquerda */
+    margin: 0 0 0 30px;        
     text-align: left;
 }
 
-/* Centraliza a foto de perfil na linha */
 .campo-perfil .foto-perfil {
     margin: 0 auto;
     display: flex;
@@ -268,11 +262,6 @@
     border-radius: 50%;
 }
 
-.campo-perfil input[type="text"],
-.campo-perfil input[type="email"] {
-    
-}
-
 .campo-perfil input[type="text"]:focus,
 .campo-perfil input[type="email"]:focus {
     border: 1.5px solid #4fd1c7;
@@ -287,7 +276,6 @@
     border-radius: 8px;
     padding: 7px 18px;
     cursor: pointer;
-    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
     box-shadow: 0 1px 4px #00000010;
     outline: none;
     flex-shrink: 0;
@@ -320,7 +308,6 @@
     color: #fff;
 }
 
-/* Alinha os botões "Alterar" do nome e do email na mesma posição */
 .campo-perfil .linha .link-atualizar.editar-nome,
 .campo-perfil .linha .link-atualizar.editar-email {
     min-width: 80px;
@@ -331,8 +318,6 @@
     justify-content: center;
 }
 
-/* Garante que o botão "Alterar" do email fique alinhado ao do nome */
 .campo-perfil .linha .link-atualizar.editar-email {
-    /* Se necessário, ajuste o margin-right para alinhar perfeitamente */
     margin-right: 0;
 }

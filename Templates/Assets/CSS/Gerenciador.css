@@ -12,12 +12,10 @@ body {
     overflow-x: hidden;
 }
 
-
 .dashboard-container {
     display: flex;
     min-height: 100vh;
 }
-
 
 .sidebar {
     width: 280px;
@@ -32,7 +30,6 @@ body {
     z-index: 100;
 }
 
-
 .logo {
     display: flex;
     align-items: center;
@@ -44,7 +41,6 @@ body {
 .logo-icon {
     width: 32px;
     height: 32px;
-    /* background: linear-gradient(135deg, #4fd1c7, #3bb5ab); */
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -63,7 +59,6 @@ body {
     height: 62px;
     border-radius: 8px;
 }
-
 
 .nav-menu {
     margin-bottom: 40px;
@@ -97,7 +92,6 @@ body {
     width: 20px;
     font-size: 16px;
 }
-
 
 .projects-section {
     margin-bottom: auto;
@@ -216,14 +210,12 @@ body {
     background-color: #4a4a4a;
 }
 
-
 .main-content {
     flex: 1;
     margin-left: 280px;
     background-color: #1a1a1a;
     min-height: 100vh;
 }
-
 
 .header {
     background-color: #2d2d2d;
@@ -254,7 +246,6 @@ body {
     color: #ffffff;
     margin-bottom: 32px;
 }
-
 
 .dashboard-content {
     padding: 0 32px 32px;
@@ -437,9 +428,6 @@ body {
         padding: 12px 20px;
     }
 }
-
-
-
 
 .header {
     display: flex;

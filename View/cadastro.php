@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'];
         $password = $_POST['password'];
         require_once '../Controller/UserController.php';
-          $userController = new \Controller\UserController();
+        $userController = new \Controller\UserController();
 
         if ($userController->checkUserByEmail($email)) {
             $registerUserMessage = "Já existe um usuário cadastrado com esse endereço de e-mail.";
@@ -29,13 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo | Cadastro </title>
     <link rel="stylesheet" href="../Templates/Assets/CSS/loginCadastro.css">
-    <link rel="shortcut icon" href="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png"
+        type="image/x-icon">
 </head>
+
 <body>
     <main>
 
@@ -74,4 +77,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </main>
 </body>
+
 </html>

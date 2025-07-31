@@ -33,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo | Login</title>
     <link rel="stylesheet" href="../Templates/Assets/CSS/loginCadastro.css">
-    <link rel="shortcut icon" href="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png"
+        type="image/x-icon">
 </head>
 
 <body>
@@ -64,5 +65,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 </html>
-
-
