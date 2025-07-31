@@ -132,7 +132,7 @@ $conn->close();
                 <div class="section-header">
                     <i class="fas fa-folder-plus"></i>
                     <button class="Add-Projeto">Adicionar Projeto</button>
-                    <form id="formNovoProjeto" action="Gerenciador.php" method="POST"
+                    <form id="formNovoProjeto" action="dashboard.php" method="POST"
                         style="display:none; margin-top:10px;">
                         <input type="text" name="nome_projeto" placeholder="Nome do projeto" required>
                         <button type="submit">Criar Projeto</button>
@@ -145,9 +145,7 @@ $conn->close();
                             <div class="project-item">
                                 <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">
                                     <span class="project-name"><?php echo htmlspecialchars($projeto['name']); ?></span>
-                                    <div
-                                        class="project-indicator <?php echo htmlspecialchars($projeto['cor'] ?? 'blue'); ?>">
-                                    </div>
+                                    <div class="project-indicator <?php echo htmlspecialchars($projeto['cor'] ?? 'blue'); ?>"></div>
                                 </a>
                             </div>
                         <?php endwhile; ?>
@@ -294,6 +292,19 @@ $conn->close();
                 document.body.appendChild(form);
                 form.submit();
             }
+            const addProjectButton = document.querySelector(".Add-Projeto");
+            const formNovoProjeto = document.getElementById("formNovoProjeto");
+            const btnCancelarProjeto = document.getElementById("btnCancelarProjeto");
+
+            addProjectButton.addEventListener("click", function () {
+                formNovoProjeto.style.display = "block";
+                addProjectButton.style.display = "none";
+            });
+
+            btnCancelarProjeto.addEventListener("click", function () {
+                formNovoProjeto.style.display = "none";
+                addProjectButton.style.display = "block";
+            });
         });
     </script>
 </body>

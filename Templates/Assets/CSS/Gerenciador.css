@@ -664,14 +664,42 @@ body {
     border-color: #4fd1c7;
 }
 
-/* Drag and drop styles */
-.task-item-row.dragging {
-    opacity: 0.5;
-    transform: rotate(2deg);
+#formNovaTarefa input[type="text"] {
+   background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    width: 200px;
+    margin-right: 10px;
+    
 }
 
-.task-item-row.drag-over {
-    border-color: #4fd1c7;
-    background-color: #3a3a3a;
+#formNovaTarefa button[type="submit"] {
+    background-color: #4fd1c7;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
 }
 
+#formNovaTarefa button[type="button"] {
+   background-color: #222;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    margin-top: 10px;
+}
