@@ -153,11 +153,7 @@ $conn->close();
 </head>
 
 <body>
-    <!-- <style>
-        body {
-            background-color: red;
-        }
-    </style> -->
+
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
@@ -205,7 +201,7 @@ $conn->close();
                 <div class="project-list">
 
 
-                    <div class="project-item">
+                    <div id="project-item" class="project-item"  >
                         <?php while ($projeto = $projetos_result->fetch_assoc()): ?>
                             <div class="project-item">
                                 <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">

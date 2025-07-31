@@ -17,6 +17,8 @@
     align-items: center;
 }
 
+
+
 .botao-voltar {
     display: flex;
     align-items: center;
@@ -268,16 +270,7 @@
 
 .campo-perfil input[type="text"],
 .campo-perfil input[type="email"] {
-    background: #222;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 1rem;
-    outline: none;
-    transition: border 0.2s;
-    width: 220px;
-    margin-right: 10px;
+    
 }
 
 .campo-perfil input[type="text"]:focus,
