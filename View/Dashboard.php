@@ -342,7 +342,6 @@ $conn->close();
                     <div class="card stat-card"> // Exibe o número de tarefas prontas
                         <div class="card-header">
                             <h3>Tarefas Prontas</h3>
-<<<<<<< HEAD
                             </div>
                             <div class="card-content">  
                              <div class="card-content">
@@ -350,18 +349,6 @@ $conn->close();
                              </div>
 
                          </div>
-=======
-                        </div>
-                        <div class="card-content">
-                            <!-- <div class="stat-number">0</div> -->
-
-
-                            <div class="card-content">
-                                <div class="stat-number"><?php echo $numTarefas; ?></div>
-                            </div>
-
-                        </div>
->>>>>>> ac9f09a867f3d32a097c963eaa5ccbcefe8575da
                     </div>
 
                     <div class="card stat-card">
@@ -508,13 +495,8 @@ $conn->close();
                     spans[0].textContent = nomeProjeto;
                 }
             }
-            // Atualiza título de boas-vindas
-            const welcomeTitle = document.querySelector(".welcome-title");
-            if (welcomeTitle) {
-                welcomeTitle.textContent = `Olá, Nicollas!`;
-            }
-            // Aqui você pode adicionar outras atualizações específicas do projeto,
-            // como tarefas, notificações, etc.
+           
+           
         }
 
         // Adiciona event listener para todos os projetos (inclusive os novos)
