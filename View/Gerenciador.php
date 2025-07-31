@@ -5,6 +5,34 @@ if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
     exit();
 }
+
+// Conecta ao banco
+$conn = new mysqli('localhost', 'root', '', 'todo');
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+// Pega o email da sessão
+$email = $_SESSION['user_email'];
+
+// Busca os dados do usuário (agora com ID e foto)
+$sql = "SELECT id, user_fullname, user_email, foto FROM user WHERE user_email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 1) {
+    $usuario = $result->fetch_assoc();
+    $usuario_id = $usuario['id'];
+    $nome = $usuario['user_fullname'];
+    $email = $usuario['user_email'];
+    $foto = !empty($usuario['foto']) ? $usuario['foto'] : '../Images/user.jpg';
+} else {
+    header('Location: login.php');
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,15 +91,20 @@ if (!isset($_SESSION['user_email'])) {
 
             <div class="user-profile">
                 <div class="user-avatar">
-                    <i class="fas fa-user"></i>
+                    <?php if (!empty($foto) && $foto !== '../Images/user.jpg'): ?>
+                        <img src="<?php echo htmlspecialchars($foto); ?>" alt="Avatar"
+                            style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+                    <?php else: ?>
+                        <i class="fas fa-user"></i>
+                    <?php endif; ?>
                 </div>
                 <div class="user-info">
-                    <div class="user-name">Nicollas</div>
-                    <div class="user-email">nicollasrio2270@gmail.com</div>
+                    <div class="user-name"><?php echo htmlspecialchars($nome); ?></div>
+                    <div class="user-email"><?php echo htmlspecialchars($email); ?></div>
                 </div>
                 <div class="user-menu">
                     <a href="userpage.php" class="user-menu">
-                    <i class="fas fa-ellipsis-vertical"></i>
+                        <i class="fas fa-ellipsis-vertical"></i>
                     </a>
                 </div>
             </div>
@@ -399,4 +432,3 @@ if (addProjectButton) {
     
 </body>
 </html>
-
