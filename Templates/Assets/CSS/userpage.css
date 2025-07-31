@@ -173,6 +173,20 @@
     margin: 0;
 }
 
+#cancelar-alterar-senha{
+        margin-left: 10px;
+    min-width: 80px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Remove o deslocamento vertical */
+    vertical-align: middle;
+
+}
+
+
+
 .campo-perfil .linha button.link-atualizar,
 .campo-perfil .linha button.cancelar-edicao {
     margin-left: 10px;

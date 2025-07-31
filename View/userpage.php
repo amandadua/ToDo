@@ -211,40 +211,41 @@ $conn->close();
 
 
 
-        <section class="secao-seguranca">
+            <section class="secao-seguranca">
                 <h1 id=linha2>Segurança</h1>
-                
+
+
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Senha</label>
-                        <span>******</span>
-                        <button class="link-atualizar-foto" type="button">Alterar senha</button>
+                      
+                        <button class="link-atualizar-foto" type="button" id="btn-alterar-senha">Alterar senha</button>
+                    </div>
+
+                    <form id="form-alterar-senha" method="POST" style="display:none; margin-top: 10px;">
+                        <input type="text" name="nova_senha" placeholder="Nova senha" required>
+                        <button class="link-atualizar" type="submit">Salvar</button>
+                        <button class="cancelar-edicao" type="button" id="cancelar-alterar-senha">Cancelar</button>
+                    </form>
+                </div>
+
+                <div class="campo-perfil">
+                    <div id="linha2" class="linha">
+                        <label>Deletar conta</label>
+                        <form method="POST"
+                            onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');"
+                            style="margin:0;">
+                            <button id="deletar" class="link-atualizar editar-nome" type="submit"
+                                name="deletar_conta">Deletar conta</button>
+                        </form>
                     </div>
                 </div>
 
-                <!-- <div class="campo-perfil">
-                    <div id=linha2 class="linha">
-                        <label>Deletar conta</label>
-    
-    
-                        <button id=deletar class="link-atualizar editar-nome" type="button">Deletar conta</button>
-                    </div>
-                </div> -->
-                
-<div class="campo-perfil">
-    <div id="linha2" class="linha">
-        <label>Deletar conta</label>
-        <form method="POST" onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');" style="margin:0;">
-            <button id="deletar" class="link-atualizar editar-nome" type="submit" name="deletar_conta">Deletar conta</button>
-        </form>
-    </div>
-</div>
-        
 
 
             </section>
 
-            
+
         </main>
     </div>
 
@@ -253,154 +254,115 @@ $conn->close();
 </html>
 
 <script>
-<<<<<<< HEAD
-// filepath: c:\xampp\htdocs\ToDo\View\userpage.php
-document.addEventListener("DOMContentLoaded", function() {
 
- const btnAlterarSenha = document.getElementById("btn-alterar-senha");
+    document.addEventListener("DOMContentLoaded", function () {
+    // Alternância entre abas
+    const perfilSection = document.querySelector('.secao-perfil');
+    const segurancaSection = document.querySelector('.secao-seguranca');
+    const navItems = document.querySelectorAll('.navegacao-barra-lateral .item-navegacao, .navegacao-barra-lateral .item-navegacao-ativo');
+
+     const activeTab = sessionStorage.getItem("activeTab");
+
+    if (activeTab === "seguranca") {
+        perfilSection.style.display = 'none';
+        segurancaSection.style.display = 'block';
+    } else {
+        perfilSection.style.display = 'block';
+        segurancaSection.style.display = 'none';
+    }
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Atualiza o armazenamento da aba ativa
+            if (this.innerText.includes('Perfil')) {
+                perfilSection.style.display = 'block';
+                segurancaSection.style.display = 'none';
+                sessionStorage.setItem("activeTab", "perfil");
+            } else {
+                perfilSection.style.display = 'none';
+                segurancaSection.style.display = 'block';
+                sessionStorage.setItem("activeTab", "seguranca");
+            }
+
+            // Atualiza classes ativas
+            navItems.forEach(i => i.classList.remove('item-navegacao-ativo'));
+            this.classList.add('item-navegacao-ativo');
+        });
+    });
+
+    // Alterar senha
+    const btnAlterarSenha = document.getElementById("btn-alterar-senha");
     const formAlterarSenha = document.getElementById("form-alterar-senha");
     const btnCancelarAlterarSenha = document.getElementById("cancelar-alterar-senha");
 
-    btnAlterarSenha.addEventListener("click", function() {
-        formAlterarSenha.style.display = "block";
-        btnAlterarSenha.style.display = "none";
-    });
+    if (btnAlterarSenha && formAlterarSenha && btnCancelarAlterarSenha) {
+        btnAlterarSenha.addEventListener("click", function () {
+            formAlterarSenha.style.display = "block";
+            btnAlterarSenha.style.display = "none";
+        });
 
-    btnCancelarAlterarSenha.addEventListener("click", function() {
-        formAlterarSenha.style.display = "none";
-        btnAlterarSenha.style.display = "";
-    });
+        btnCancelarAlterarSenha.addEventListener("click", function () {
+            formAlterarSenha.style.display = "none";
+            btnAlterarSenha.style.display = "inline-block";
+        });
+    }
 
-
-    // Foto de perfil (já existente)
+    // Atualizar foto
     const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
     const inputFoto = document.getElementById("input-foto-perfil");
     const formFoto = document.getElementById("form-foto-perfil");
-=======
-    // filepath: c:\xampp\htdocs\ToDo\View\userpage.php
-    document.addEventListener("DOMContentLoaded", function () {
-        // Foto de perfil (já existente)
-        const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
-        const inputFoto = document.getElementById("input-foto-perfil");
-        const formFoto = document.getElementById("form-foto-perfil");
->>>>>>> ac9f09a867f3d32a097c963eaa5ccbcefe8575da
 
-        btnAtualizarFoto.addEventListener("click", function () {
-            inputFoto.click();
+    if (btnAtualizarFoto && inputFoto && formFoto) {
+        btnAtualizarFoto.addEventListener("click", () => inputFoto.click());
+        inputFoto.addEventListener("change", () => {
+            if (inputFoto.files.length > 0) formFoto.submit();
         });
+    }
 
-        inputFoto.addEventListener("change", function () {
-            if (inputFoto.files.length > 0) {
-                formFoto.submit();
-            }
-        });
+    // Editar nome e email
+    function toggleField(editBtnClass, spanId, formId) {
+        const editBtn = document.querySelector(editBtnClass);
+        const span = document.getElementById(spanId);
+        const form = document.getElementById(formId);
 
-        // Nome de usuário
-        const editarNomeBtn = document.querySelector(".editar-nome");
-        const nomeValor = document.getElementById("nome-usuario-valor");
-        const formNome = document.getElementById("form-nome");
+        if (editBtn && span && form) {
+            editBtn.addEventListener("click", () => {
+                span.style.display = "none";
+                form.style.display = "flex";
+                editBtn.style.display = "none";
+                form.querySelector("input").focus();
+            });
 
-        editarNomeBtn.addEventListener("click", function () {
-            nomeValor.style.display = "none";
-            formNome.style.display = "flex";
-            editarNomeBtn.style.display = "none";
-            formNome.querySelector("input").focus();
-        });
-
-        formNome.querySelector(".cancelar-edicao").addEventListener("click", function () {
-            nomeValor.style.display = "";
-            formNome.style.display = "none";
-            editarNomeBtn.style.display = "";
-        });
-
-        // E-mail
-        const editarEmailBtn = document.querySelector(".editar-email");
-        const emailValor = document.getElementById("email-usuario-valor");
-        const formEmail = document.getElementById("form-email");
-
-        editarEmailBtn.addEventListener("click", function () {
-            emailValor.style.display = "none";
-            formEmail.style.display = "flex";
-            editarEmailBtn.style.display = "none";
-            formEmail.querySelector("input").focus();
-        });
-
-        formEmail.querySelector(".cancelar-edicao").addEventListener("click", function () {
-            emailValor.style.display = "";
-            formEmail.style.display = "none";
-            editarEmailBtn.style.display = "";
-        });
-    });
-<<<<<<< HEAD
-
-    inputFoto.addEventListener("change", function() {
-        if (inputFoto.files.length > 0) {
-            formFoto.submit();
+            form.querySelector(".cancelar-edicao").addEventListener("click", () => {
+                span.style.display = "";
+                form.style.display = "none";
+                editBtn.style.display = "";
+            });
         }
-    });
+    }
 
-    // Nome de usuário
-    const editarNomeBtn = document.querySelector(".editar-nome");
-    const nomeValor = document.getElementById("nome-usuario-valor");
-    const formNome = document.getElementById("form-nome");
-
-    editarNomeBtn.addEventListener("click", function() {
-        nomeValor.style.display = "none";
-        formNome.style.display = "flex";
-        editarNomeBtn.style.display = "none";
-        formNome.querySelector("input").focus();
-    });
-
-    formNome.querySelector(".cancelar-edicao").addEventListener("click", function() {
-        nomeValor.style.display = "";
-        formNome.style.display = "none";
-        editarNomeBtn.style.display = "";
-    });
-
-    // E-mail
-    const editarEmailBtn = document.querySelector(".editar-email");
-    const emailValor = document.getElementById("email-usuario-valor");
-    const formEmail = document.getElementById("form-email");
-
-    editarEmailBtn.addEventListener("click", function() {
-        emailValor.style.display = "none";
-        formEmail.style.display = "flex";
-        editarEmailBtn.style.display = "none";
-        formEmail.querySelector("input").focus();
-    });
-
-    formEmail.querySelector(".cancelar-edicao").addEventListener("click", function() {
-        emailValor.style.display = "";
-        formEmail.style.display = "none";
-        editarEmailBtn.style.display = "";
-    });
+    toggleField(".editar-nome", "nome-usuario-valor", "form-nome");
+    toggleField(".editar-email", "email-usuario-valor", "form-email");
 });
 
-  // Alternância entre Perfil e Segurança
-    const perfilSection = document.querySelector('.secao-perfil');
-    const segurancaSection = document.querySelector('.secao-seguranca');
-    const navPerfil = document.querySelector('.navegacao-barra-lateral .item-navegacao-ativo');
-    const navSeguranca = document.querySelector('.navegacao-barra-lateral .item-navegacao');
+ // // Mostra só perfil ao carregar
+     perfilSection.style.display = 'block';
+     segurancaSection.style.display = 'none';
 
-    // Mostra só perfil ao carregar
-    perfilSection.style.display = 'block';
-    segurancaSection.style.display = 'none';
-
-    navPerfil.addEventListener('click', function() {
-        perfilSection.style.display = 'block';
-        segurancaSection.style.display = 'none';
-        navPerfil.classList.add('item-navegacao-ativo');
+     navPerfil.addEventListener('click', function () {
+         perfilSection.style.display = 'block';
+         segurancaSection.style.display = 'none';
+         navPerfil.classList.add('item-navegacao-ativo');
         navSeguranca.classList.remove('item-navegacao-ativo');
-    });
+     });
 
-    navSeguranca.addEventListener('click', function() {
+     navSeguranca.addEventListener('click', function () {
         perfilSection.style.display = 'none';
         segurancaSection.style.display = 'block';
-        navSeguranca.classList.add('item-navegacao-ativo');
+         navSeguranca.classList.add('item-navegacao-ativo');
         navPerfil.classList.remove('item-navegacao-ativo');
-    });
-</script>
+     });
 
-=======
+
+  
 </script>
->>>>>>> ac9f09a867f3d32a097c963eaa5ccbcefe8575da
