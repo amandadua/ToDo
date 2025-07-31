@@ -35,8 +35,8 @@
                 </h1>
                 <p class="titulo-legenda">Uma ferramenta gratuita de gerenciamento de projetos criada para pequenos
                     projetos.</p>
-                    <div class="button-container">
-                <a href="View/cadastro.php" class="btn botao-cadastro">Começar</a>
+                <div class="button-container">
+                    <a href="View/cadastro.php" class="btn botao-cadastro">Começar</a>
                 </div>
             </div>
         </div>

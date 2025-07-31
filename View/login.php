@@ -12,19 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
 
     if ($userController->login($email, $password)) {
-
         $_SESSION['user_email'] = $email;
         header('Location: ../View/Dashboard.php');
-
         exit();
     } else {
         $loginMessage = "Email ou senha incorretos.";
     }
 }
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -35,6 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="../Templates/Assets/CSS/loginCadastro.css">
     <link rel="shortcut icon" href="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png"
         type="image/x-icon">
+    <style>
+        .error-message {
+            color: red;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -52,10 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="Senha"> Senha
                 <input class="caixa" type="password" name="password" id="Senha" required>
             </label>
-            <a href="Dashboard.php"><input class="botão" type="submit" value="Continuar"></a>
+            <input class="botão" type="submit" value="Continuar">
         </form>
 
-        <p style="color: red; text-align: center;"><?php echo $loginMessage; ?></p>
+        <?php if (!empty($loginMessage)): ?>
+            <p class="error-message"><?php echo $loginMessage; ?></p>
+        <?php endif; ?>
 
         <div class="base">
             <p> Não tem uma conta? </p>

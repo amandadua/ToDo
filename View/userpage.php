@@ -1,20 +1,10 @@
 <?php
-
 session_start();
 require_once '../Controller/UserController.php';
 use Controller\UserController;
 
 $userController = new UserController();
-
-if (isset($_POST['deletar_conta'])) {
-    $email = $_SESSION['user_email']; // ou o ID do usuário, se preferir
-    $userController->deletarConta($email); // Implemente esse método no seu controller
-    session_destroy();
-    header('Location: login.php');
-    exit();
-}
-
-
+$mensagem = '';
 
 if (!isset($_SESSION['user_email'])) {
     header('Location: login.php');
@@ -28,57 +18,63 @@ if ($conn->connect_error) {
 
 $email = $_SESSION['user_email'];
 
-// Atualiza a foto se o formulário foi enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
-    $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-    $nome_arquivo = uniqid() . "." . $extensao;
-    $caminho = "uploads/" . $nome_arquivo;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Cria a pasta uploads se não existir
-    if (!is_dir("uploads")) {
-        mkdir("uploads", 0755, true);
+    if (isset($_POST['deletar_conta'])) {
+        $userController->deletarConta($email);
+        session_destroy();
+        header('Location: login.php');
+        exit();
     }
 
-    // Move o arquivo
-    if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminho)) {
-        // Atualiza no banco
-        $sql = "UPDATE user SET foto = ? WHERE user_email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $caminho, $email);
-        $stmt->execute();
-        // Opcional: mensagem de sucesso
-        $mensagem = "Foto atualizada com sucesso!";
-    } else {
-        $mensagem = "Erro ao salvar a imagem.";
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+        $nome_arquivo = uniqid() . "." . $extensao;
+        $caminho = "uploads/" . $nome_arquivo;
+
+        if (!is_dir("uploads")) {
+            mkdir("uploads", 0755, true);
+        }
+
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $caminho)) {
+            $sql = "UPDATE user SET foto = ? WHERE user_email = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $caminho, $email);
+            $stmt->execute();
+            $mensagem = "Foto atualizada com sucesso!";
+        } else {
+            $mensagem = "Erro ao salvar a imagem.";
+        }
+    }
+
+    if (isset($_POST['salvar_nome_email'])) {
+        if (isset($_POST['novo_nome']) && !empty($_POST['novo_nome'])) {
+            $novo_nome = $_POST['novo_nome'];
+            $sql = "UPDATE user SET user_fullname = ? WHERE user_email = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $novo_nome, $email);
+            $stmt->execute();
+            $mensagem = "Nome atualizado com sucesso!";
+        }
+        if (isset($_POST['novo_email']) && !empty($_POST['novo_email'])) {
+            $novo_email = $_POST['novo_email'];
+            $sql = "UPDATE user SET user_email = ? WHERE user_email = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ss", $novo_email, $email);
+            $stmt->execute();
+            $mensagem = "E-mail atualizado com sucesso!";
+            $_SESSION['user_email'] = $novo_email;
+            $email = $novo_email;
+        }
+    }
+
+    if (isset($_POST['nova_senha'])) {
+        $novaSenha = $_POST['nova_senha'];
+        $userController->alterarSenha($email, $novaSenha);
+        $mensagem = "Senha alterada com sucesso!";
     }
 }
 
-// Atualiza nome ou email se o formulário foi enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_nome_email'])) {
-    if (isset($_POST['novo_nome']) && !empty($_POST['novo_nome'])) {
-        $novo_nome = $_POST['novo_nome'];
-        $sql = "UPDATE user SET user_fullname = ? WHERE user_email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $novo_nome, $email);
-        $stmt->execute();
-        $mensagem = "Nome atualizado com sucesso!";
-        // Atualiza a variável para exibir o novo nome imediatamente
-        $nome = $novo_nome;
-    }
-    if (isset($_POST['novo_email']) && !empty($_POST['novo_email'])) {
-        $novo_email = $_POST['novo_email'];
-        $sql = "UPDATE user SET user_email = ? WHERE user_email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $novo_email, $email);
-        $stmt->execute();
-        $mensagem = "E-mail atualizado com sucesso!";
-        // Atualiza a sessão e variável para exibir o novo email imediatamente
-        $_SESSION['user_email'] = $novo_email;
-        $email = $novo_email;
-    }
-}
-
-// Busca os dados do usuário
 $sql = "SELECT user_fullname, user_email, foto FROM user WHERE user_email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
@@ -96,15 +92,8 @@ if ($result->num_rows === 1) {
     $foto = '../Images/user.jpg';
 }
 
-if (isset($_POST['nova_senha'])) {
-    $novaSenha = $_POST['nova_senha'];
-    $userController->alterarSenha($email, $novaSenha);
-    $mensagem = "Senha alterada com sucesso!";
-}
-
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -149,12 +138,6 @@ $conn->close();
                     </div>
                 </nav>
             </aside>
-
-
-
-
-
-
 
             <section class="secao-perfil">
                 <h1>Detalhes do perfil</h1>
@@ -205,20 +188,12 @@ $conn->close();
                 </div>
             </section>
 
-
-
-
-
-
-
-            <section class="secao-seguranca">
-                <h1 id=linha2>Segurança</h1>
-
+            <section class="secao-seguranca" style="display: none;">
+                <h1>Segurança</h1>
 
                 <div class="campo-perfil">
                     <div class="linha">
                         <label>Senha</label>
-                      
                         <button class="link-atualizar-foto" type="button" id="btn-alterar-senha">Alterar senha</button>
                     </div>
 
@@ -230,7 +205,7 @@ $conn->close();
                 </div>
 
                 <div class="campo-perfil">
-                    <div id="linha2" class="linha">
+                    <div class="linha">
                         <label>Deletar conta</label>
                         <form method="POST"
                             onsubmit="return confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita!');"
@@ -240,12 +215,7 @@ $conn->close();
                         </form>
                     </div>
                 </div>
-
-
-
             </section>
-
-
         </main>
     </div>
 
@@ -254,115 +224,87 @@ $conn->close();
 </html>
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function () {
-    // Alternância entre abas
-    const perfilSection = document.querySelector('.secao-perfil');
-    const segurancaSection = document.querySelector('.secao-seguranca');
-    const navItems = document.querySelectorAll('.navegacao-barra-lateral .item-navegacao, .navegacao-barra-lateral .item-navegacao-ativo');
+        const perfilSection = document.querySelector('.secao-perfil');
+        const segurancaSection = document.querySelector('.secao-seguranca');
+        const navItems = document.querySelectorAll('.navegacao-barra-lateral .item-navegacao, .navegacao-barra-lateral .item-navegacao-ativo');
 
-     const activeTab = sessionStorage.getItem("activeTab");
+        const activeTab = sessionStorage.getItem("activeTab");
 
-    if (activeTab === "seguranca") {
-        perfilSection.style.display = 'none';
-        segurancaSection.style.display = 'block';
-    } else {
-        perfilSection.style.display = 'block';
-        segurancaSection.style.display = 'none';
-    }
+        if (activeTab === "seguranca") {
+            perfilSection.style.display = 'none';
+            segurancaSection.style.display = 'block';
+        } else {
+            perfilSection.style.display = 'block';
+            segurancaSection.style.display = 'none';
+        }
 
-    navItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // Atualiza o armazenamento da aba ativa
-            if (this.innerText.includes('Perfil')) {
-                perfilSection.style.display = 'block';
-                segurancaSection.style.display = 'none';
-                sessionStorage.setItem("activeTab", "perfil");
-            } else {
-                perfilSection.style.display = 'none';
-                segurancaSection.style.display = 'block';
-                sessionStorage.setItem("activeTab", "seguranca");
-            }
+        navItems.forEach(item => {
+            item.addEventListener('click', function () {
+                if (this.innerText.includes('Perfil')) {
+                    perfilSection.style.display = 'block';
+                    segurancaSection.style.display = 'none';
+                    sessionStorage.setItem("activeTab", "perfil");
+                } else {
+                    perfilSection.style.display = 'none';
+                    segurancaSection.style.display = 'block';
+                    sessionStorage.setItem("activeTab", "seguranca");
+                }
 
-            // Atualiza classes ativas
-            navItems.forEach(i => i.classList.remove('item-navegacao-ativo'));
-            this.classList.add('item-navegacao-ativo');
-        });
-    });
-
-    // Alterar senha
-    const btnAlterarSenha = document.getElementById("btn-alterar-senha");
-    const formAlterarSenha = document.getElementById("form-alterar-senha");
-    const btnCancelarAlterarSenha = document.getElementById("cancelar-alterar-senha");
-
-    if (btnAlterarSenha && formAlterarSenha && btnCancelarAlterarSenha) {
-        btnAlterarSenha.addEventListener("click", function () {
-            formAlterarSenha.style.display = "block";
-            btnAlterarSenha.style.display = "none";
+                navItems.forEach(i => i.classList.remove('item-navegacao-ativo'));
+                this.classList.add('item-navegacao-ativo');
+            });
         });
 
-        btnCancelarAlterarSenha.addEventListener("click", function () {
-            formAlterarSenha.style.display = "none";
-            btnAlterarSenha.style.display = "inline-block";
-        });
-    }
+        const btnAlterarSenha = document.getElementById("btn-alterar-senha");
+        const formAlterarSenha = document.getElementById("form-alterar-senha");
+        const btnCancelarAlterarSenha = document.getElementById("cancelar-alterar-senha");
 
-    // Atualizar foto
-    const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
-    const inputFoto = document.getElementById("input-foto-perfil");
-    const formFoto = document.getElementById("form-foto-perfil");
-
-    if (btnAtualizarFoto && inputFoto && formFoto) {
-        btnAtualizarFoto.addEventListener("click", () => inputFoto.click());
-        inputFoto.addEventListener("change", () => {
-            if (inputFoto.files.length > 0) formFoto.submit();
-        });
-    }
-
-    // Editar nome e email
-    function toggleField(editBtnClass, spanId, formId) {
-        const editBtn = document.querySelector(editBtnClass);
-        const span = document.getElementById(spanId);
-        const form = document.getElementById(formId);
-
-        if (editBtn && span && form) {
-            editBtn.addEventListener("click", () => {
-                span.style.display = "none";
-                form.style.display = "flex";
-                editBtn.style.display = "none";
-                form.querySelector("input").focus();
+        if (btnAlterarSenha && formAlterarSenha && btnCancelarAlterarSenha) {
+            btnAlterarSenha.addEventListener("click", function () {
+                formAlterarSenha.style.display = "block";
+                btnAlterarSenha.style.display = "none";
             });
 
-            form.querySelector(".cancelar-edicao").addEventListener("click", () => {
-                span.style.display = "";
-                form.style.display = "none";
-                editBtn.style.display = "";
+            btnCancelarAlterarSenha.addEventListener("click", function () {
+                formAlterarSenha.style.display = "none";
+                btnAlterarSenha.style.display = "inline-block";
             });
         }
-    }
 
-    toggleField(".editar-nome", "nome-usuario-valor", "form-nome");
-    toggleField(".editar-email", "email-usuario-valor", "form-email");
-});
+        const btnAtualizarFoto = document.querySelector(".link-atualizar-foto");
+        const inputFoto = document.getElementById("input-foto-perfil");
+        const formFoto = document.getElementById("form-foto-perfil");
 
- // // Mostra só perfil ao carregar
-     perfilSection.style.display = 'block';
-     segurancaSection.style.display = 'none';
+        if (btnAtualizarFoto && inputFoto && formFoto) {
+            btnAtualizarFoto.addEventListener("click", () => inputFoto.click());
+            inputFoto.addEventListener("change", () => {
+                if (inputFoto.files.length > 0) formFoto.submit();
+            });
+        }
 
-     navPerfil.addEventListener('click', function () {
-         perfilSection.style.display = 'block';
-         segurancaSection.style.display = 'none';
-         navPerfil.classList.add('item-navegacao-ativo');
-        navSeguranca.classList.remove('item-navegacao-ativo');
-     });
+        function toggleField(editBtnClass, spanId, formId) {
+            const editBtn = document.querySelector(editBtnClass);
+            const span = document.getElementById(spanId);
+            const form = document.getElementById(formId);
 
-     navSeguranca.addEventListener('click', function () {
-        perfilSection.style.display = 'none';
-        segurancaSection.style.display = 'block';
-         navSeguranca.classList.add('item-navegacao-ativo');
-        navPerfil.classList.remove('item-navegacao-ativo');
-     });
+            if (editBtn && span && form) {
+                editBtn.addEventListener("click", () => {
+                    span.style.display = "none";
+                    form.style.display = "flex";
+                    editBtn.style.display = "none";
+                    form.querySelector("input").focus();
+                });
 
+                form.querySelector(".cancelar-edicao").addEventListener("click", () => {
+                    span.style.display = "";
+                    form.style.display = "none";
+                    editBtn.style.display = "";
+                });
+            }
+        }
 
-  
+        toggleField(".editar-nome", "nome-usuario-valor", "form-nome");
+        toggleField(".editar-email", "email-usuario-valor", "form-email");
+    });
 </script>

@@ -3,10 +3,7 @@ namespace Controller;
 
 use PDO;
 
-
-
 class UserController {
-    public $conn;
     private $pdo;
 
     public function __construct() {
@@ -21,35 +18,29 @@ class UserController {
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($user) {
-            if (password_verify($password, $user['password'])) {
-                return true;
-            } else {
-                // Senha incorreta
-                return false;
-            }
+        if ($user && password_verify($password, $user['password'])) {
+            return true;
         }
 
         return false;
     }
 
     public function checkUserByEmail($email) {
-    $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE user_email = :email");
-    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-    $stmt->execute();
-    $count = $stmt->fetchColumn();
-    return $count > 0;
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE user_email = :email");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        return $count > 0;
     }
 
-
- public function createUser($user_fullname, $email, $password) {
+    public function createUser($user_fullname, $email, $password) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $stmt = $this->pdo->prepare("INSERT INTO user (user_fullname, user_email, password) VALUES (:user_fullname, :email, :password)");
         $stmt->bindParam(':user_fullname', $user_fullname, PDO::PARAM_STR);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
         return $stmt->execute();
-    } // <-- aqui termina o método, não a classe!
+    }
 
     public function deletarConta($email) {
         $stmt = $this->pdo->prepare("DELETE FROM user WHERE user_email = ?");
@@ -63,8 +54,4 @@ class UserController {
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
     }
-} // <-- só UM fechamento da classe aqui!
-
-
-
-?>
+}

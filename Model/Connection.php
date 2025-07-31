@@ -28,4 +28,3 @@ class Connection
         return self::$instance;
     }
 }
-?>

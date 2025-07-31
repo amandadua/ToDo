@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user_fullname = $_POST['user_fullname'];
         $email = $_POST['email'];
         $password = $_POST['password'];
+        
         require_once '../Controller/UserController.php';
         $userController = new \Controller\UserController();
 
@@ -26,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <main>
-
         <div class="topo">
             <img src="../Images/WhatsApp_Image_2025-07-22_at_08.35.46-removebg-preview.png" alt="">
             <h2>Crie sua conta</h2>
@@ -49,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <form action="" method="POST">
-
             <label for="NomeDeUsuário">Nome de usuário
                 <input class="caixa" type="text" name="user_fullname" required>
             </label>
@@ -62,8 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input class="caixa" type="password" name="password" required>
             </label>
 
-            <a href="login.php"><input class="botão" type="submit" value="Criar conta"></a>
-
+            <input class="botão" type="submit" value="Criar conta">
         </form>
 
         <?php if ($registerUserMessage): ?>
@@ -74,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Já tem uma conta?</p>
             <a href="../View/login.php">Faça login</a>
         </div>
-
     </main>
 </body>
 
