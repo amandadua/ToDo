@@ -61,9 +61,9 @@ $tarefasTotais = 0;
 $tarefas_result = null;
 
 if ($projeto_id) {
-    $query_base = "SELECT COUNT(*) FROM task WHERE user_id = ? AND projeto_id = ?";
-    $params = "ii";
-    $values = [&$usuario_id, &$projeto_id];
+    $query_base = "SELECT COUNT(*) FROM task WHERE projeto_id = ?";
+    $params = "i";
+    $values = [&$projeto_id];
 
     $stmt = $conn->prepare($query_base);
     if ($stmt) {

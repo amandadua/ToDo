@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $novaTarefa = trim($_POST['nova_tarefa']);
         $projeto_id = (int) $_POST['projeto_id'];
         if (!empty($novaTarefa)) {
-            $stmt = $conn->prepare("INSERT INTO task (titulo, projeto_id, user_id, status) VALUES (?, ?, ?, 'Pendente')");
-            $stmt->bind_param("sii", $novaTarefa, $projeto_id, $usuario_id);
+            $stmt = $conn->prepare("INSERT INTO task (titulo, projeto_id, status) VALUES (?, ?, 'Pendente')");
+            $stmt->bind_param("si", $novaTarefa, $projeto_id);
             $stmt->execute();
             header("Location: ../View/Gerenciador.php" . ($projeto_id ? '?projeto_id=' . $projeto_id : ''));
             exit();
@@ -145,7 +145,9 @@ $conn->close();
                             <div class="project-item">
                                 <a href="?projeto_id=<?php echo $projeto['id']; ?>" class="project-link">
                                     <span class="project-name"><?php echo htmlspecialchars($projeto['name']); ?></span>
-                                    <div class="project-indicator <?php echo htmlspecialchars($projeto['cor'] ?? 'blue'); ?>"></div>
+                                    <div
+                                        class="project-indicator <?php echo htmlspecialchars($projeto['cor'] ?? 'blue'); ?>">
+                                    </div>
                                 </a>
                             </div>
                         <?php endwhile; ?>
@@ -196,8 +198,8 @@ $conn->close();
                 <?php endif; ?>
                 <?php if ($tarefas_result && $tarefas_result->num_rows > 0): ?>
                     <?php while ($task = $tarefas_result->fetch_assoc()): ?>
-                        <?php $isCompleted = ($task['status'] === 'Concluída'); ?>
-                        <div class="task-item-row<?php echo $isCompleted ? ' completed' : ''; ?>">
+                        <?php $isCompleted = ($task['status'] === 'Concluido'); ?>
+                        <div class="task-item-row<?php echo $isCompleted ? ' Concluido' : ''; ?>">
                             <div class="task-details">
                                 <i class="<?= $isCompleted ? 'fas fa-check-circle' : 'far fa-circle' ?> task-checkbox"
                                     data-task-id="<?php echo $task['id']; ?>"
@@ -259,7 +261,7 @@ $conn->close();
             } else if (toggleTarget) {
                 const taskId = toggleTarget.getAttribute('data-task-id');
                 const currentStatus = toggleTarget.getAttribute('data-task-status');
-                const newStatus = currentStatus === 'Concluída' ? 'Pendente' : 'Concluída';
+                const newStatus = currentStatus === 'Concluido' ? 'Pendente' : 'Concluido';
 
                 const form = document.createElement('form');
                 form.method = 'POST';
