@@ -84,7 +84,7 @@ if ($projeto_id) {
         $stmt->close();
     }
 
-    $query_prontas = $query_base . " AND status = 'Concluída'";
+    $query_prontas = $query_base . " AND status = 'Concluido'";
     $stmt = $conn->prepare($query_prontas);
     if ($stmt) {
         $stmt->bind_param($params, ...$values);
